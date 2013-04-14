@@ -10,7 +10,7 @@ from django.conf import settings
 urlpatterns = patterns('',
     # Example:
     # (r'^{{ project_name }}/', include('{{ project_name }}.foo.urls')),
-
+    url(r'^events/', include('events.urls', namespace="events")),
     # Uncomment the admin/doc line below to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
