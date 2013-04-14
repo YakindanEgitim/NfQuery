@@ -4,3 +4,4 @@ dist/
 nfquery.egg-info/
 *.pyc
 *.txt
+*~
