@@ -1,21 +1,21 @@
 {% extends "base/base.html" %}
 
 {% block navigation %}  
-
-<div class="navbar-inner">
-   <div class="container">
-     <button data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar" type="button">
-       <span class="icon-bar"></span>
-       <span class="icon-bar"></span>
-       <span class="icon-bar"></span>
-     </button>
-     <a href="#" class="brand">NfQuery</a>
-     <div class="nav-collapse collapse">
-       <ul class="nav">
-         <li class="active"><a href="#">Events</a></li>
-         <li><a href="#about">Analysis</a></li>
-       </ul>
-     </div><!--/.nav-collapse -->
+<div class="navbar navbar-inverse navbar-fixed-top">
+   <div class="navbar-inner">
+     <div class="container">
+       <button data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar" type="button">
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+       </button>
+       <a href="#" class="brand">NfQuery</a>
+       <div class="nav-collapse collapse">
+         <ul class="nav">
+             <li {% ifequal tabName "events" %}class="active"{% endifequal %}><a href="#">Events</a></li>
+         </ul>
+       </div><!--/.nav-collapse -->
+     </div>
    </div>
 </div>
 {% endblock %}

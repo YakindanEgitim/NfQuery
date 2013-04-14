@@ -1,5 +1,4 @@
-from django.conf.urls import patterns, url
-
+from django.conf.urls.defaults import *
 from events import views
 
 urlpatterns = patterns('',
