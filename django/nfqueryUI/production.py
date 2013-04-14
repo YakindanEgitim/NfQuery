@@ -1,0 +1,2 @@
+
+from nfqueryUI.settings import *

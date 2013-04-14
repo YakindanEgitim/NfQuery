@@ -33,7 +33,7 @@ setup(
 	   zip_safe = False,
 	   #install_requires = ['MySQLdb',],
        data_files = [
-            ('/etc/',['/home/serhat/nfquery/cfg/nfquery.conf'])
+            ('/etc/',['/home/serhat/NfQuery/queryserver/cfg/nfquery.conf'])
 #      		('/etc/',['/home/ahmetcan/Workspace/projects/cfg/nfquery.conf'])
 #           ('/etc/',['/home/hamza/nfquery/cfg/nfquery.conf'])
        ],
