@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate, login, logout
 from django.utils.translation import ugettext as _
 from main.forms import LoginForm
 
@@ -32,3 +32,7 @@ def login_user(request):
     else:
         data['form'] = LoginForm()
         return render_to_response('main/login.html', data, context_instance=RequestContext(request))
+
+def logout_user(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('main:login'))
