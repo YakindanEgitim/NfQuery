@@ -21,15 +21,12 @@ def login_user(request):
                     login(request, user)
                     return HttpResponseRedirect(reverse('events:index'))
                 else:
-                    print "a"
                     data['form'] = form
                     return render_to_response('main/login.html', data, context_instance=RequestContext(request))
             else:
-                print "aa"
                 data['form'] = form
                 return render_to_response('main/login.html', data, context_instance=RequestContext(request))
         else:
-            print "aaa"
             data['form'] = form
             return render_to_response('main/login.html', data, context_instance=RequestContext(request))
     else:
