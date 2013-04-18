@@ -7,10 +7,10 @@ import re
 class Pattern:
     def __init__(self, program):
         if (program == "apache"):
-            self.pattern = self.returnApacheLogPattern()
+            self.pattern = self.get_apache_log_pattern()
 
 
-    def returnApacheLogPattern(self):
+    def get_apache_log_pattern(self):
         # this pattern to parse apache access log
         pattern_re = [
          r'(?P<host>\S+)',                   # host %h
@@ -51,9 +51,10 @@ class Parser:
             self.pattern = Pattern("apache")
             apache_line = log['raw'].split("apache: ")[1]
             matched = self.pattern.pattern.match(apache_line)
-            print matched.groupdict()
-            print matched.groupdict()['host']
-            print "\n\n"
+            if matched:
+                print matched.groupdict()
+                print matched.groupdict()['host']
+                print "\n\n"
 
     def start(self):
         #self.pattern = Pattern("apache")
