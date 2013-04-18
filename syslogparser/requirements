@@ -1,0 +1,4 @@
+requirements:
+    * python-logsparser module
+    * python config module
+    * python tailer module
