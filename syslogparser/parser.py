@@ -49,12 +49,23 @@ class Parser:
         print log
         if log['program'] == "apache":
             self.pattern = Pattern("apache")
-            apache_line = log['raw'].split("apache: ")[1]
+            apache_line = log['raw'].split(":",3)[-1].lstrip()
             matched = self.pattern.pattern.match(apache_line)
             if matched:
                 print matched.groupdict()
                 print matched.groupdict()['host']
                 print "\n\n"
+        
+        if log['program'] == "vsftpd":
+            self.pattern = Pattern("vsftpd")
+            vsftpd_line = log['body'].split(":")
+            vsftpd_line_first_part = vsftpd_line[0]
+            user = vsftpd_line_first_part.split("]")[0][1:]
+            message = " ".join(vsftpd_line_first_part.split()[1:])
+            client = vsftpd_line[1].lstrip().split()[1][1:-1]
+            vsftpd_log = {"user" : user, "message" : message, "client" : client}
+            print vsftpd_log
+       
 
     def start(self):
         #self.pattern = Pattern("apache")
