@@ -392,3 +392,24 @@ class Statistics(object):
     alert = Reference(alert_id, Alert.id)
     #start_time = Reference(start_time_id, Time.id)
     #end_time = Reference(end_time_id, Time.id)
+
+class Program(object):
+    __storm_table__ = 'program'
+
+    id = Int(primary=True)
+    name = Unicode()
+    
+
+
+class LogUser(object):
+    __storm_table__ = 'log_user'
+
+    id = Int(primary=True)
+    user = Unicode()
+    
+
+class Client(object):
+    __storm_table = 'client'
+
+    id = Int(primary=True)
+    client = Unicode()     

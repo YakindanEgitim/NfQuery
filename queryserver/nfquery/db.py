@@ -382,10 +382,36 @@ def initialize_db(store):
                   "number_of_bytes INT UNSIGNED NOT NULL,"                           +
                   "number_of_packets INT UNSIGNED NOT NULL,"                         +
                   "PRIMARY KEY (id),"                                                +
-                  "FOREIGN KEY (alert_id) REFERENCES alert(id) ON DELETE CASCADE"   +
+                  "FOREIGN KEY (alert_id) REFERENCES alert(id) ON DELETE CASCADE"    +
+                  ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci"
+                 )
+
+
+
+ 
+    store.execute(
+                  "CREATE TABLE program("                                                 +
+                  "id INT UNSIGNED NOT NULL AUTO_INCREMENT,"                         +
+                  "program VARCHAR(20) COLLATE utf8_unicode_ci NOT NULL,"                 +
+                  "PRIMARY KEY (id)"                                                 +
                   ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci"
                  )
     
+    store.execute(
+                  "CREATE TABLE log_user("                                          + 
+                  "id INT UNSIGNED NOT NULL AUTO_INCREMENT,"                        +
+                  "user VARCHAR(30) COLLATE utf8_unicode_ci NOT NULL,"              +
+                  "PRIMARY KEY (id)"                                                +
+                  ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci"
+                 )
+
+    store.execute(
+                  "CREATE TABLE client("                                             + 
+                  "id INT UNSIGNED NOT NULL AUTO_INCREMENT,"                         +
+                  "client VARCHAR(30) NOT NULL,"                                     +
+                  "PRIMARY KEY (id)"                                                +
+                  ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
+                 )
 
 	
 def insert_threats(store):
