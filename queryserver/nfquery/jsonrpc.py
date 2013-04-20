@@ -226,6 +226,11 @@ class jsonRPCServer(jsonrpc.JSONRPC):
         self.rpclogger.debug('In %s' % sys._getframe().f_code.co_name)
         return self.queryManager.generateQuery(query_info_list, mandatory, plugin_ip)
 
+
+    def jsonrpc_push_syslog_data(self, syslog_data):
+        self.rpclogger.debug('In %s' % sys._getframe().f_code.co_name)
+        self.queryManager.pushSyslogData(syslog_data)
+          
  
 #def getExampleService():
 #    r = Example()

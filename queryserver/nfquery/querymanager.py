@@ -1042,4 +1042,7 @@ class QueryManager:
         query_info[0]['date'] = datetime.strptime(query_info[0]['date'], '%Y-%m-%d %H:%M')
         self.QGenerator.generateQuery(query_info)
         return True 
-        
+       
+
+    def pushSyslogData(self, syslog_data): 
+        self.qmlogger.info('Alert is already created')
