@@ -1,0 +1,23 @@
+{% extends "base/layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block css %}
+    <link href='{% static "css/login.css" %}' rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+        <form action="{% url 'main:login' %}" method="post" class="form-login">{% csrf_token %}
+                <h2 class="form-login-heading">{% trans "Login" %}</h2>
+                {{ form.errors }}
+                {{ form.non_field_errors }}
+            {% for field in form %}
+                {% ifequal field.html_name "password" %}
+                    <input type="password" name="{{ field.html_name }}" id="password" class="input-block-level" placeholder="{% trans "password" %}">
+                {% else %}
+                    <input type="text" name="{{ field.html_name }}" id="username" class="input-block-level" placeholder="{% trans "username" %}">
+                {% endifequal %} 
+            {% endfor %}
+            <button type="submit" class="btn btn-large btn-primary">{% trans "Submit" %}</button>
+        </form>
+{% endblock %}

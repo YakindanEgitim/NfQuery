@@ -10,16 +10,18 @@
          <span class="icon-bar"></span>
        </button>
        <a href="#" class="brand">NfQuery</a>
+       {% if tabName %}
        <div class="nav-collapse collapse">
          <ul class="nav">
              <li {% ifequal tabName "events" %}class="active"{% endifequal %}><a href="#">Events</a></li>
          </ul>
        </div><!--/.nav-collapse -->
+       {% endif %}
      </div>
    </div>
 </div>
 {% endblock %}
 
-{% block content%}  
+{% block content %}  
 
 {% endblock %}
