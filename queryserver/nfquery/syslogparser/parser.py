@@ -1,8 +1,9 @@
 import tailer
 #from tail import *
-from config import Config
+from config import Config, ConfigError
 from logsparser import lognormalizer
 import re
+import sys
 
 class Pattern:
     def __init__(self, program):
@@ -34,11 +35,20 @@ class Pattern:
 
 
 class Parser:
-    def __init__(self, parserFile):
-        self.parserFile = parserFile
-        f = file('parser.cfg')
-        self.config = Config(f)
-        self.lognorm = lognormalizer.LogNormalizer(self.config.logparser.normalizers)
+    def __init__(self, configfile):
+
+        # Parse Config File
+        try:
+            self.config = Config(configfile)
+        except ConfigError, e:
+            self.qslogger.info("Please check configuration file syntax")
+            self.qslogger.info("%s" % e)
+            sys.exit(1)
+        self.parserFile = self.config.syslog[0].syslog_path
+
+ #       f = file('parser.cfg')
+ #       self.config = Config(f)
+        self.lognorm = lognormalizer.LogNormalizer(self.config.syslog[0].normalizers)
 
 ##    def getLineFromLogFile(self, logline):
 ##        self.parse(logline)
@@ -72,3 +82,9 @@ class Parser:
         for logline in tailer.follow(open(self.parserFile)):
             self.parse(logline)
         #tail(self.parserFile, self.getLineFromLogFile).mainloop()
+
+
+if __name__ == "__main__":
+    configfile = sys.argv[1]
+    parser = Parser(configfile)
+    parser.start()

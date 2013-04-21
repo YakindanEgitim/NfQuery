@@ -32,6 +32,8 @@ import logger
 from querymanager import QueryManager
 
 
+
+from syslogparser.parser import *
 ######################################################
 # Special Imports For Twisted JSON_RPC  -> txjsonrpc
 from twisted.web import server
@@ -54,6 +56,7 @@ class QueryServer:
         
         # Parse Config File
         try:
+            self.configfile = configfile
             self.config = Config(configfile)
         except ConfigError, e:
             self.qslogger.info("Please check configuration file syntax")
@@ -64,10 +67,11 @@ class QueryServer:
 
         # Prepare Config File Sections
         ConfigSections = {
-            'nfquery'  : ['path','sources_path','host','port','ipv6', 'cert_file', 'key_file', 'logfile'], 
+            'nfquery'  : ['path','sources_path','syslog_parser_path','host','port','ipv6', 'cert_file', 'key_file', 'logfile'], 
             'plugins'  : ['organization', 'adm_name', 'adm_mail', 'adm_tel', 'adm_publickey_file', 'prefix_list', 'plugin_ip'],
             'database' : ['db_host','db_name','db_user','db_password'], 
-            'sources'  : ['source_name','source_link','source_file','threat_type','output_file','parser','time_interval']
+            'sources'  : ['source_name','source_link','source_file','threat_type','output_file','parser','time_interval'],
+            'syslog'  : ['host','syslog_path','parser_script','normalizers']
         }
 
         # Check Config File Sections
@@ -108,6 +112,15 @@ class QueryServer:
             print "Certs are fine"
         return True
 
+
+
+    def startSyslogParser(self):
+        '''
+            Start Syslog Parser
+        '''
+        self.queryManager.executeSyslogParser(self.config.syslog[0].parser_script,self.configfile)
+
+       
     def startJSONRPCServer(self):
         '''
             Start Json RPC Server, bind to socket and listen for incoming connections from plugins.
@@ -165,6 +178,10 @@ class QueryServer:
 
         # Start Scheduler
         self.startScheduler()
+
+
+        #Start syslog parser
+        self.startSyslogParser()
 
         # Set shutdown handler
         atexit.register(self.stop)

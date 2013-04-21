@@ -344,7 +344,15 @@ class QueryManager:
                 # in executeParsers ;), because executeParser gives error if it can't
                 # find a parser and crash!!!
 
-    
+   
+    def executeSyslogParser(self, parser_script, configfile):
+        self.qmlogger.debug('In %s' % sys._getframe().f_code.co_name)
+        returncode = subprocess.Popen([ 'python', parser_script, configfile])
+        if returncode == 0:
+            self.qmlogger.debug('syslog parser stopped.')
+        else:
+            self.qmlogger.debug('syslog parser returned with error')
+ 
     def executeParsers(self, parser=None):
         self.qmlogger.debug('In %s' % sys._getframe().f_code.co_name)
         if parser is None:
