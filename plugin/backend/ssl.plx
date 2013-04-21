@@ -7,7 +7,7 @@ use LWP::UserAgent;
 use JSON::RPC::LWP;
 use JSON::RPC::Client;
 #use Net::SSL;
-use Net::SSL (); # From Crypt-SSLeay
+#use Net::SSL (); # From Crypt-SSLeay
 
 #$Net::HTTPS::SSL_SOCKET_CLASS = "Net::SSL"; # Force use of Net::SSL
 $ENV{HTTPS_DEBUG} = 1;
@@ -31,9 +31,10 @@ $ua->ssl_opts( verify_hostname => 0);
 
 print "JSON RPC CONNECTION\n";
 my $rpc = JSON::RPC::LWP->new(
-  ua => $ua,
+#  ua => $ua,
   version => '2.0'
 );
-my $result = $rpc->call(  'https://208.113.144.131:7777', 'register', '127.0.0.1');
+#my $result = $rpc->call(  'https://208.113.144.131:7777', 'register', '127.0.0.1');
+my $result = $rpc->call(  'http://192.168.1.2:7777', 'hello', '127.0.0.1');
 #my $result = $rpc->call( 'https://193.140.100.96:7777', {method=>'echo', params=>['127.0.0.1']});
 print $result->result, "\n";

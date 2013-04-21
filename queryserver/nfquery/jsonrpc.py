@@ -230,6 +230,10 @@ class jsonRPCServer(jsonrpc.JSONRPC):
     def jsonrpc_push_syslog_data(self, syslog_data):
         self.rpclogger.debug('In %s' % sys._getframe().f_code.co_name)
         self.queryManager.pushSyslogData(syslog_data)
+
+    def jsonrpc_test(self):
+        self.rpclogger.debug('TEST')
+        return "test"
           
  
 #def getExampleService():
