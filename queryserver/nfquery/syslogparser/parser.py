@@ -1,9 +1,16 @@
+#!/usr/bin/python
+#imports standart library
+import sys
+import re
+
+#import third party modules
 import tailer
-#from tail import *
 from config import Config, ConfigError
 from logsparser import lognormalizer
-import re
-import sys
+
+from nfquery import db
+from nfquery.models import *
+
 
 class Pattern:
     def __init__(self, program):
@@ -14,29 +21,55 @@ class Pattern:
     def get_apache_log_pattern(self):
         # this pattern to parse apache access log
         pattern_re = [
-         r'(?P<host>\S+)',                   # host %h
-         r'\S+',                             # indent %l (unused)
-         r'(?P<user>\S+)',                   # user %u
-         r'\[(?P<time>.+)\]',                # time %t
-         r'"(?P<request>.+)"',               # request "%r"
-         r'(?P<status>[0-9]+)',              # status %>s
-         r'(?P<size>\S+)',                   # size %b (careful, can be '-')
-         r'"(?P<referer>.*)"',               # referer "%{Referer}i"
-         r'"(?P<agent>.*)"',                 # user agent "%{User-agent}i"
-   
-
-        ]
+                       r'(?P<host>\S+)',                   # host %h
+                       r'\S+',                             # indent %l (unused)
+                       r'(?P<user>\S+)',                   # user %u
+                       r'\[(?P<time>.+)\]',                # time %t
+                       r'"(?P<request>.+)"',               # request "%r"
+                       r'(?P<status>[0-9]+)',              # status %>s
+                       r'(?P<size>\S+)',                   # size %b (careful, can be '-')
+                       r'"(?P<referer>.*)"',               # referer "%{Referer}i"
+                       r'"(?P<agent>.*)"',                 # user agent "%{User-agent}i"
+                      ]
         pattern = re.compile(r'\s+'.join(pattern_re)+r'\s*\Z')
         return pattern
 
 
-
-
-
-
 class Parser:
-    def __init__(self, configfile):
 
+    def insert_to_database(self, syslog_data):
+        if 'severity_code' in syslog_data.keys():
+            severity = self.store.find(Severity, Severity.severity == unicode(syslog_data['severity_code'])).one()
+            if severity == None:
+                severity = Severity()
+                severity.severity = unicode(syslog_data['severity_code'])
+                self.store.add(severity)       
+ 
+#        if 'facility_code' in syslog_data.keys():
+#            facility = self.store.find(Facility, Facility.facility == unicode(syslog_data['facility_code'])).one()
+#            if facility == None:
+#                facility = Facility()
+#                facility.facility = unicode(syslog_data['severity'])
+#                self.store.add(facility) 
+        
+        if 'information' in syslog_data.keys():
+            informations = syslog_data['information']
+            if 'user' in informations.keys():
+                log_user = self.store.find(LogUser, LogUser.user == unicode(informations['user'])).one()
+                if log_user == None:
+                    log_user = LogUser()
+                    log_user.user = unicode(informations['user'])
+                    self.store.add(log_user)
+ 
+      #      if 'host' in informations.keys():
+      #          client = self.store.find(Client, Client.client == unicode(informations['host'])).one()
+      #          if client == None:
+      #              client = Client()
+      #              client.client = unicode(informations['host'])
+      #              self.store.add(client) 
+        self.store.commit()     
+
+    def __init__(self, configfile):
         # Parse Config File
         try:
             self.config = Config(configfile)
@@ -44,14 +77,12 @@ class Parser:
             self.qslogger.info("Please check configuration file syntax")
             self.qslogger.info("%s" % e)
             sys.exit(1)
+
+        self.store = db.get_store(self.config.database)
+         
         self.parserFile = self.config.syslog[0].syslog_path
 
- #       f = file('parser.cfg')
- #       self.config = Config(f)
         self.lognorm = lognormalizer.LogNormalizer(self.config.syslog[0].normalizers)
-
-##    def getLineFromLogFile(self, logline):
-##        self.parse(logline)
 
     def parse(self, logline):
         log = {'raw' : logline}
@@ -62,6 +93,8 @@ class Parser:
             apache_line = log['raw'].split(":",3)[-1].lstrip()
             matched = self.pattern.pattern.match(apache_line)
             if matched:
+                log['information'] = matched.groupdict()
+                self.insert_to_database(log)
                 print matched.groupdict()
                 print matched.groupdict()['host']
                 print "\n\n"
@@ -73,15 +106,18 @@ class Parser:
             user = vsftpd_line_first_part.split("]")[0][1:]
             message = " ".join(vsftpd_line_first_part.split()[1:])
             client = vsftpd_line[1].lstrip().split()[1][1:-1]
-            vsftpd_log = {"user" : user, "message" : message, "client" : client}
+            vsftpd_log = {"user" : user, "message" : message, "host" : client}
+            log['information'] = vsftpd_log
+            self.insert_to_database(log)
             print vsftpd_log
        
-
+        print "\n\n"
+        print "LOGG"
+        print log
+        print "\n\n"
     def start(self):
-        #self.pattern = Pattern("apache")
         for logline in tailer.follow(open(self.parserFile)):
             self.parse(logline)
-        #tail(self.parserFile, self.getLineFromLogFile).mainloop()
 
 
 if __name__ == "__main__":

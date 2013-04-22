@@ -412,6 +412,20 @@ def initialize_db(store):
                   "PRIMARY KEY (id)"                                                +
                   ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
                  )
+    store.execute(
+                  "CREATE TABLE severity("                                             + 
+                  "id INT UNSIGNED NOT NULL AUTO_INCREMENT,"                         +
+                  "severity VARCHAR(15) NOT NULL,"                                     +
+                  "PRIMARY KEY (id)"                                                +
+                  ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
+                 )
+    store.execute(
+                  "CREATE TABLE facility("                                             + 
+                  "id INT UNSIGNED NOT NULL AUTO_INCREMENT,"                         +
+                  "facility VARCHAR(15) NOT NULL,"                                     +
+                  "PRIMARY KEY (id)"                                                +
+                  ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
+                 )
 
 	
 def insert_threats(store):
