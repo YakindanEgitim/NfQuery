@@ -413,3 +413,18 @@ class Client(object):
 
     id = Int(primary=True)
     client = Unicode()     
+
+
+
+class Severity(object):
+    __storm_table__ = 'severity'
+
+    id = Int(primary=True)
+    severity = Unicode()
+    
+
+class Facility(object):
+    __storm_table = 'facility'
+
+    id = Int(primary=True)
+    facility = Unicode()     
