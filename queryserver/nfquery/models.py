@@ -409,7 +409,7 @@ class LogUser(object):
     
 
 class Client(object):
-    __storm_table = 'client'
+    __storm_table__ = 'client'
 
     id = Int(primary=True)
     client = Unicode()     
@@ -424,7 +424,7 @@ class Severity(object):
     
 
 class Facility(object):
-    __storm_table = 'facility'
+    __storm_table__ = 'facility'
 
     id = Int(primary=True)
     facility = Unicode()     

@@ -392,7 +392,7 @@ def initialize_db(store):
     store.execute(
                   "CREATE TABLE program("                                                 +
                   "id INT UNSIGNED NOT NULL AUTO_INCREMENT,"                         +
-                  "program VARCHAR(20) COLLATE utf8_unicode_ci NOT NULL,"                 +
+                  "name VARCHAR(20) COLLATE utf8_unicode_ci NOT NULL,"                 +
                   "PRIMARY KEY (id)"                                                 +
                   ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci"
                  )
