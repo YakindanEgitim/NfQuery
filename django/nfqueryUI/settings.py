@@ -9,6 +9,13 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+RPC_URL = "https://127.0.0.1:7777/"
+#path to certificate and key files that need to connect queryserver.
+ROOT_CERTIFICATE = "/home/serhat/NfQuery/queryserver/cfg/certs/cacert.pem"
+CLIENT_CERTIFICATE = "/home/serhat/NfQuery/queryserver/cfg/certs/plugin-cert.pem"
+CLIENT_KEY = "/home/serhat/NfQuery/queryserver/cfg/certs/plugin-key.pem"
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
