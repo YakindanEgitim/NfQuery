@@ -413,19 +413,41 @@ def initialize_db(store):
                   ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
                  )
     store.execute(
-                  "CREATE TABLE severity("                                             + 
+                  "CREATE TABLE severity("                                           + 
                   "id INT UNSIGNED NOT NULL AUTO_INCREMENT,"                         +
-                  "severity VARCHAR(15) NOT NULL,"                                     +
-                  "PRIMARY KEY (id)"                                                +
+                  "severity VARCHAR(15) NOT NULL,"                                   +
+                  "PRIMARY KEY (id)"                                                 +
                   ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
                  )
     store.execute(
-                  "CREATE TABLE facility("                                             + 
+                  "CREATE TABLE facility("                                           + 
                   "id INT UNSIGNED NOT NULL AUTO_INCREMENT,"                         +
-                  "facility VARCHAR(15) NOT NULL,"                                     +
-                  "PRIMARY KEY (id)"                                                +
+                  "facility VARCHAR(15) NOT NULL,"                                   +
+                  "PRIMARY KEY (id)"                                                 +
                   ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
                  )
+
+
+    store.execute(
+                  "CREATE TABLE log_packet ("                                          +
+                  "id INT UNSIGNED NOT NULL AUTO_INCREMENT,"                           +
+                  "user_id INT UNSIGNED NOT NULL,"                                     +
+                  "program_id INT UNSIGNED NOT NULL,"                                  +
+                  "client_id INT UNSIGNED NOT NULL,"                                   +
+                  "severity_id INT UNSIGNED NOT NULL,"                                 +
+                  "facility_id INT UNSIGNED NOT NULL,"                                 +
+                  "creation_time_id int(10) unsigned NOT NULL,"                        +
+                  "PRIMARY KEY (id),"                                                  +
+                  "FOREIGN KEY (program_id) REFERENCES program(id) ON DELETE CASCADE," +
+                  "FOREIGN KEY (facility_id) REFERENCES facility(id) ON DELETE CASCADE,"  +
+                  "FOREIGN KEY (severity_id) REFERENCES severity(id) ON DELETE CASCADE,"  +
+                  "FOREIGN KEY (user_id) REFERENCES log_user(id) ON DELETE CASCADE,"   +
+                  "FOREIGN KEY (client_id) REFERENCES client(id) ON DELETE CASCADE,"   +
+                  "FOREIGN KEY (creation_time_id) REFERENCES time(id) ON DELETE CASCADE"  +
+                  ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci"
+                 )
+
+
 
 	
 def insert_threats(store):
