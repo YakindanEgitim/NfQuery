@@ -410,21 +410,21 @@ def initialize_db(store):
                   "id INT UNSIGNED NOT NULL AUTO_INCREMENT,"                         +
                   "client VARCHAR(30) NOT NULL,"                                     +
                   "PRIMARY KEY (id)"                                                +
-                  ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
+                  ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci"
                  )
     store.execute(
                   "CREATE TABLE severity("                                           + 
                   "id INT UNSIGNED NOT NULL AUTO_INCREMENT,"                         +
                   "severity VARCHAR(15) NOT NULL,"                                   +
                   "PRIMARY KEY (id)"                                                 +
-                  ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
+                  ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci"
                  )
     store.execute(
                   "CREATE TABLE facility("                                           + 
                   "id INT UNSIGNED NOT NULL AUTO_INCREMENT,"                         +
                   "facility VARCHAR(15) NOT NULL,"                                   +
                   "PRIMARY KEY (id)"                                                 +
-                  ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
+                  ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci"
                  )
 
 
@@ -436,15 +436,27 @@ def initialize_db(store):
                   "client_id INT UNSIGNED NOT NULL,"                                   +
                   "severity_id INT UNSIGNED NOT NULL,"                                 +
                   "facility_id INT UNSIGNED NOT NULL,"                                 +
-                  "creation_time_id int(10) unsigned NOT NULL,"                        +
+                  "creation_time_id INT UNSIGNED NOT NULL,"                        +
                   "PRIMARY KEY (id),"                                                  +
-                  "FOREIGN KEY (program_id) REFERENCES program(id) ON DELETE CASCADE," +
-                  "FOREIGN KEY (facility_id) REFERENCES facility(id) ON DELETE CASCADE,"  +
-                  "FOREIGN KEY (severity_id) REFERENCES severity(id) ON DELETE CASCADE,"  +
-                  "FOREIGN KEY (user_id) REFERENCES log_user(id) ON DELETE CASCADE,"   +
-                  "FOREIGN KEY (client_id) REFERENCES client(id) ON DELETE CASCADE,"   +
-                  "FOREIGN KEY (creation_time_id) REFERENCES time(id) ON DELETE CASCADE"  +
-                  ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci"
+#    		  "KEY program_id (program_id),"                                         +
+#    		  "KEY facility_id (facility_id),"                                         +
+#    		  "KEY severity_id (severity_id),"                                         +
+#    		  "KEY user_id (user_id),"                                         +
+#    		  "KEY client_id (client_id),"                                         +
+#    		  "KEY creation_time_id (creation_time_id),"                                         +
+#		  "CONSTRAINT log_packet_ibfk_1 FOREIGN KEY (program_id) REFERENCES program (id) ON DELETE CASCADE,"+
+#		  "CONSTRAINT log_packet_ibfk_2 FOREIGN KEY (facility_id) REFERENCES facility (id) ON DELETE CASCADE,"+
+#		  "CONSTRAINT log_packet_ibfk_3 FOREIGN KEY (severity_id) REFERENCES severity (id) ON DELETE CASCADE,"+
+#		  "CONSTRAINT log_packet_ibfk_4 FOREIGN KEY (user_id) REFERENCES log_user (id) ON DELETE CASCADE,"+
+#		  "CONSTRAINT log_packet_ibfk_5 FOREIGN KEY (client_id) REFERENCES client (id) ON DELETE CASCADE,"+
+#		  "CONSTRAINT log_packet_ibfk_6 FOREIGN KEY (creation_time_id) REFERENCES time (id) ON DELETE CASCADE"+
+                  "FOREIGN KEY (program_id) REFERENCES program(id) ON UPDATE CASCADE," +
+                  "FOREIGN KEY (facility_id) REFERENCES facility(id) ON UPDATE CASCADE,"  +
+                  "FOREIGN KEY (severity_id) REFERENCES severity(id) ON UPDATE CASCADE,"  +
+                  "FOREIGN KEY (user_id) REFERENCES log_user(id) ON UPDATE CASCADE,"   +
+                  "FOREIGN KEY (client_id) REFERENCES client(id) ON UPDATE CASCADE,"   +
+                  "FOREIGN KEY (creation_time_id) REFERENCES time(id) ON UPDATE CASCADE"  +
+                  ")ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci;"
                  )
 
 
