@@ -45,14 +45,17 @@ class Parser:
                 program = Program()
                 program.name = unicode(syslog_data['program'])
                 self.store.add(program)      
-            log_packet.program = program
+                self.store.flush()    
+            log_packet.program_id = program.id
+
         if 'severity_code' in syslog_data.keys():
             severity = self.store.find(Severity, Severity.severity == unicode(syslog_data['severity_code'])).one()
             if severity == None:
                 severity = Severity()
                 severity.severity = unicode(syslog_data['severity_code'])
                 self.store.add(severity)       
-            log_packet.severity = severity
+                self.store.flush()     
+            log_packet.severity_id = severity.id
  
         if 'facility_code' in syslog_data.keys():
             facility = self.store.find(Facility, Facility.facility == unicode(syslog_data['facility_code'])).one()
@@ -60,7 +63,8 @@ class Parser:
                 facility = Facility()
                 facility.facility = unicode(syslog_data['facility'])
                 self.store.add(facility) 
-            log_packet.facility = facility
+                self.store.flush()     
+            log_packet.facility_id = facility.id
         
         if 'date' in syslog_data.keys():
             date = self.store.find(Time, Time.time == syslog_data['date']).one()
@@ -68,7 +72,8 @@ class Parser:
                 date = Time()
                 date.time = syslog_data['date']
                 self.store.add(date) 
-            log_packet.creation_time = date
+                self.store.flush()     
+            log_packet.creation_time_id = date.id
         
         if 'information' in syslog_data.keys():
             informations = syslog_data['information']
@@ -78,7 +83,8 @@ class Parser:
                     log_user = LogUser()
                     log_user.user = unicode(informations['user'])
                     self.store.add(log_user)
-                log_packet.user = log_user
+                    self.store.flush()     
+                log_packet.user_id = log_user.id
  
             if 'host' in informations.keys():
                 client = self.store.find(Client, Client.client == unicode(informations['host'])).one()
@@ -86,7 +92,8 @@ class Parser:
                     client = Client()
                     client.client = unicode(informations['host'])
                     self.store.add(client) 
-                log_packet.client = client
+                    self.store.flush()     
+                log_packet.client_id = client.id
         self.store.add(log_packet) 
         self.store.commit()     
 
