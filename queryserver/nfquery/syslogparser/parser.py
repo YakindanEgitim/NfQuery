@@ -38,19 +38,37 @@ class Pattern:
 class Parser:
 
     def insert_to_database(self, syslog_data):
+        log_packet = LogPacket() 
+        if 'program' in syslog_data.keys():
+            program = self.store.find(Program, Program.name == unicode(syslog_data['program'])).one()
+            if program == None:
+                program = Program()
+                program.name = unicode(syslog_data['program'])
+                self.store.add(program)      
+            log_packet.program = program
         if 'severity_code' in syslog_data.keys():
             severity = self.store.find(Severity, Severity.severity == unicode(syslog_data['severity_code'])).one()
             if severity == None:
                 severity = Severity()
                 severity.severity = unicode(syslog_data['severity_code'])
                 self.store.add(severity)       
+            log_packet.severity = severity
  
-#        if 'facility_code' in syslog_data.keys():
-#            facility = self.store.find(Facility, Facility.facility == unicode(syslog_data['facility_code'])).one()
-#            if facility == None:
-#                facility = Facility()
-#                facility.facility = unicode(syslog_data['severity'])
-#                self.store.add(facility) 
+        if 'facility_code' in syslog_data.keys():
+            facility = self.store.find(Facility, Facility.facility == unicode(syslog_data['facility_code'])).one()
+            if facility == None:
+                facility = Facility()
+                facility.facility = unicode(syslog_data['facility'])
+                self.store.add(facility) 
+            log_packet.facility = facility
+        
+        if 'date' in syslog_data.keys():
+            date = self.store.find(Time, Time.time == syslog_data['date']).one()
+            if date == None:
+                date = Time()
+                date.time = syslog_data['date']
+                self.store.add(date) 
+            log_packet.creation_time = date
         
         if 'information' in syslog_data.keys():
             informations = syslog_data['information']
@@ -60,13 +78,16 @@ class Parser:
                     log_user = LogUser()
                     log_user.user = unicode(informations['user'])
                     self.store.add(log_user)
+                log_packet.user = log_user
  
-      #      if 'host' in informations.keys():
-      #          client = self.store.find(Client, Client.client == unicode(informations['host'])).one()
-      #          if client == None:
-      #              client = Client()
-      #              client.client = unicode(informations['host'])
-      #              self.store.add(client) 
+            if 'host' in informations.keys():
+                client = self.store.find(Client, Client.client == unicode(informations['host'])).one()
+                if client == None:
+                    client = Client()
+                    client.client = unicode(informations['host'])
+                    self.store.add(client) 
+                log_packet.client = client
+        self.store.add(log_packet) 
         self.store.commit()     
 
     def __init__(self, configfile):
@@ -88,28 +109,29 @@ class Parser:
         log = {'raw' : logline}
         self.lognorm.lognormalize(log)
         print log
-        if log['program'] == "apache":
-            self.pattern = Pattern("apache")
-            apache_line = log['raw'].split(":",3)[-1].lstrip()
-            matched = self.pattern.pattern.match(apache_line)
-            if matched:
-                log['information'] = matched.groupdict()
+        if 'program' in log.keys():
+            if log['program'] == "apache":
+                self.pattern = Pattern("apache")
+                apache_line = log['raw'].split(":",3)[-1].lstrip()
+                matched = self.pattern.pattern.match(apache_line)
+                if matched:
+                    log['information'] = matched.groupdict()
+                    self.insert_to_database(log)
+                    print matched.groupdict()
+                    print matched.groupdict()['host']
+                    print "\n\n"
+            
+            if log['program'] == "vsftpd":
+                self.pattern = Pattern("vsftpd")
+                vsftpd_line = log['body'].split(":")
+                vsftpd_line_first_part = vsftpd_line[0]
+                user = vsftpd_line_first_part.split("]")[0][1:]
+                message = " ".join(vsftpd_line_first_part.split()[1:])
+                client = vsftpd_line[1].lstrip().split()[1][1:-1]
+                vsftpd_log = {"user" : user, "message" : message, "host" : client}
+                log['information'] = vsftpd_log
                 self.insert_to_database(log)
-                print matched.groupdict()
-                print matched.groupdict()['host']
-                print "\n\n"
-        
-        if log['program'] == "vsftpd":
-            self.pattern = Pattern("vsftpd")
-            vsftpd_line = log['body'].split(":")
-            vsftpd_line_first_part = vsftpd_line[0]
-            user = vsftpd_line_first_part.split("]")[0][1:]
-            message = " ".join(vsftpd_line_first_part.split()[1:])
-            client = vsftpd_line[1].lstrip().split()[1][1:-1]
-            vsftpd_log = {"user" : user, "message" : message, "host" : client}
-            log['information'] = vsftpd_log
-            self.insert_to_database(log)
-            print vsftpd_log
+                print vsftpd_log
        
         print "\n\n"
         print "LOGG"
