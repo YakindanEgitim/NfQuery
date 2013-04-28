@@ -13,7 +13,7 @@
        {% if tabName %}
        <div class="nav-collapse collapse">
          <ul class="nav">
-                 <li {% ifequal tabName "events" %}class="active"{% endifequal %}><a href="{% url "events:index" %}">{% trans Events %}</a></li>
+                 <li {% ifequal tabName "events" %}class="active"{% endifequal %}><a href="{% url "events:index" %}">{% trans "Events" %}</a></li>
         </ul>
         <ul class="nav pull-right">
             <li><a href="{% url "main:logout" %}">{% trans "Logout" %}</a></li>
