@@ -38,7 +38,15 @@ class Pattern:
 class Parser:
 
     def insert_to_database(self, syslog_data):
-        log_packet = LogPacket() 
+        log_packet = LogPacket()
+        host = self.store.find(Host, Host.host_name == unicode(self.host_name)).one() 
+        if host == None:
+            host = Host()
+            host.host_name = unicode(self.host_name)
+            self.store.add(host)      
+            self.store.flush()    
+        log_packet.host_name_id = host.id
+            
         if 'program' in syslog_data.keys():
             program = self.store.find(Program, Program.name == unicode(syslog_data['program'])).one()
             if program == None:
@@ -109,6 +117,7 @@ class Parser:
         self.store = db.get_store(self.config.database)
          
         self.parserFile = self.config.syslog[0].syslog_path
+        self.host_name = self.config.syslog[0].host
 
         self.lognorm = lognormalizer.LogNormalizer(self.config.syslog[0].normalizers)
 

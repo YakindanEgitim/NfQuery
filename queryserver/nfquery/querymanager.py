@@ -540,33 +540,22 @@ class QueryManager:
    
 
 
-        log_packets = self.store.find(LogPacket)
-        packet_number = 0
-        for packet in log_packets:
-            log_packet[packet_number] = {}
-            log_packet[packet_number]['user'] = packet.user.user
-            log_packet[packet_number]['client'] = packet.client.client
-            log_packet[packet_number]['creation_time'] = packet.creation_time.time 
-            log_packet[packet_number]['facility'] = packet.facility.facility
-            log_packet[packet_number]['severity'] = packet.severity.severity
-            log_packet[packet_number]['program'] = packet.program.name
-            packet_number = packet_number + 1
-        print log_packet
-        return log_packet
-        
-     
     def get_log(self):
         log_packet = {} 
        
         log_packets = self.store.find(LogPacket)
         packet_number = 0
         for packet in log_packets:
-            log_packet[packet_number] = {}
-            log_packet[packet_number]['user'] = packet.user.user
-            log_packet[packet_number]['client'] = packet.client.client
-            log_packet[packet_number]['creation_time'] = packet.creation_time.time 
-            log_packet[packet_number]['facility'] = packet.facility.facility
-            log_packet[packet_number]['severity'] = packet.severity.severity
+            if packet.host.host_name not in log_packet.keys():
+                log_packet[packet.host.host_name] = {}
+            log_packet[packet.host.host_name][packet_number] = {}
+            log_packet[packet.host.host_name][packet_number]['user'] = packet.user.user
+            log_packet[packet.host.host_name][packet_number]['client'] = packet.client.client
+            log_packet[packet.host.host_name][packet_number]['creation_time'] = packet.creation_time.time 
+            log_packet[packet.host.host_name][packet_number]['facility'] = packet.facility.facility
+            log_packet[packet.host.host_name][packet_number]['severity'] = packet.severity.severity
+            log_packet[packet.host.host_name][packet_number]['program'] = packet.program.name
+            log_packet[packet.host.host_name][packet_number]['host'] = packet.host.host_name
             packet_number = packet_number + 1
         print log_packet
         return log_packet

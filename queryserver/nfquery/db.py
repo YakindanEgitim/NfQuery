@@ -429,6 +429,15 @@ def initialize_db(store):
 
 
     store.execute(
+                  "CREATE TABLE host("                                           + 
+                  "id INT UNSIGNED NOT NULL AUTO_INCREMENT,"                         +
+                  "host_name VARCHAR(15) NOT NULL,"                                   +
+                  "PRIMARY KEY (id)"                                                 +
+                  ")ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci"
+                 )
+
+
+    store.execute(
                   "CREATE TABLE log_packet ("                                          +
                   "id INT UNSIGNED NOT NULL AUTO_INCREMENT,"                           +
                   "user_id INT UNSIGNED NOT NULL,"                                     +
@@ -437,13 +446,15 @@ def initialize_db(store):
                   "severity_id INT UNSIGNED NOT NULL,"                                 +
                   "facility_id INT UNSIGNED NOT NULL,"                                 +
                   "creation_time_id INT UNSIGNED NOT NULL,"                        +
+                  "host_name_id INT UNSIGNED NOT NULL,"                        +
                   "PRIMARY KEY (id),"                                                  +
                   "FOREIGN KEY (program_id) REFERENCES program(id) ON UPDATE CASCADE," +
                   "FOREIGN KEY (facility_id) REFERENCES facility(id) ON UPDATE CASCADE,"  +
                   "FOREIGN KEY (severity_id) REFERENCES severity(id) ON UPDATE CASCADE,"  +
                   "FOREIGN KEY (user_id) REFERENCES log_user(id) ON UPDATE CASCADE,"   +
                   "FOREIGN KEY (client_id) REFERENCES client(id) ON UPDATE CASCADE,"   +
-                  "FOREIGN KEY (creation_time_id) REFERENCES time(id) ON UPDATE CASCADE"  +
+                  "FOREIGN KEY (creation_time_id) REFERENCES time(id) ON UPDATE CASCADE,"  +
+                  "FOREIGN KEY (host_name_id) REFERENCES host(id) ON UPDATE CASCADE"  +
                   ")ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci;"
                  )
 

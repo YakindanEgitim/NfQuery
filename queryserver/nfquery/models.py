@@ -430,6 +430,13 @@ class Facility(object):
     facility = Unicode()     
 
 
+class Host(object):
+    __storm_table__ = 'host'
+
+    id = Int(primary = True)
+    host_name = Unicode()
+
+
 class LogPacket(object):
     __storm_table__ = 'log_packet'
  
@@ -440,6 +447,7 @@ class LogPacket(object):
     creation_time_id = Int()
     severity_id = Int()
     facility_id = Int()
+    host_name_id = Int()
 
     client =  Reference(client_id, Client.id)
     user =  Reference(user_id, LogUser.id)
@@ -447,5 +455,6 @@ class LogPacket(object):
     facility = Reference(facility_id, Facility.id)
     severity = Reference(severity_id, Severity.id)
     program = Reference(program_id, Program.id)
+    host = Reference(host_name_id, Host.id)
 
 
