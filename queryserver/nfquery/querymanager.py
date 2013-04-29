@@ -540,6 +540,22 @@ class QueryManager:
    
 
 
+   
+     
+    def get_log(self):
+        log_packet = {} 
+       
+        log_packets = self.store.find(LogPacket)
+        packet_number = 0
+        for packet in log_packets:
+            log_packet[packet_number] = {}
+            log_packet[packet_number]['user'] = packet.user.user
+            log_packet[packet_number]['client'] = packet.client.client
+            log_packet[packet_number]['creation_time'] = packet.creation_time.time 
+            log_packet[packet_number]['facility'] = packet.facility.facility
+            log_packet[packet_number]['severity'] = packet.severity.severity
+            packet_number = packet_number + 1
+        return log_packet
 
     def getPluginId(self, ip_address):
         self.qmlogger.debug('In %s' % sys._getframe().f_code.co_name)

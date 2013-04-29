@@ -4,7 +4,7 @@ from MySQLdb import Error as MySQLException
 from config import Config, ConfigError
 import sys
 def get_store():
-    configfile = "/home/hamza/nfquery/cfg/nfquery.conf"
+    configfile = "/etc/nfquery.conf"
 #    configfile = "/home/ahmetcan/Workspace/projects/cfg/nfquery.conf"
     try:
         config = Config(configfile)
