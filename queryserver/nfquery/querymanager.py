@@ -540,7 +540,20 @@ class QueryManager:
    
 
 
-   
+        log_packets = self.store.find(LogPacket)
+        packet_number = 0
+        for packet in log_packets:
+            log_packet[packet_number] = {}
+            log_packet[packet_number]['user'] = packet.user.user
+            log_packet[packet_number]['client'] = packet.client.client
+            log_packet[packet_number]['creation_time'] = packet.creation_time.time 
+            log_packet[packet_number]['facility'] = packet.facility.facility
+            log_packet[packet_number]['severity'] = packet.severity.severity
+            log_packet[packet_number]['program'] = packet.program.name
+            packet_number = packet_number + 1
+        print log_packet
+        return log_packet
+        
      
     def get_log(self):
         log_packet = {} 
@@ -555,6 +568,7 @@ class QueryManager:
             log_packet[packet_number]['facility'] = packet.facility.facility
             log_packet[packet_number]['severity'] = packet.severity.severity
             packet_number = packet_number + 1
+        print log_packet
         return log_packet
 
     def getPluginId(self, ip_address):
