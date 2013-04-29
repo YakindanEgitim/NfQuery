@@ -1,5 +1,5 @@
 import logging
-from twisted.internet import reactor, ssl
+from twisted.internet import reactor, ssl, threads
 from txjsonrpc.web.jsonrpc import Proxy
 
 from OpenSSL import SSL
@@ -8,7 +8,10 @@ from nfqueryUI.settings import ROOT_CERTIFICATE, CLIENT_CERTIFICATE, CLIENT_KEY,
 
 class AltCtxFactory(ssl.ClientContextFactory):
     def verifyCallback(self, connection, x509, errnum, errdepth, ok):
-        pass
+        if not ok:
+            return False
+        else:
+            return True
 
     def getContext(self):
         #self.method = SSL.SSLv23_METHOD
@@ -26,14 +29,11 @@ class Client:
 
     def printValue(self, value):
         self.result = value        
-        reactor.stop()
 
     def printError(self, error):
-        pass 
-
+        print error
+    
     def call(self, method, *args):
-        d = self.proxy.callRemote(method, *args)
-        d.addCallback(self.printValue).addErrback(self.printError)
-        reactor.run()
-
-        return self.result
+        #d = self.proxy.callRemote(method, *args)
+        result = threads.blockingCallFromThread(reactor, self.proxy.callRemote, method , *args)
+        return result
