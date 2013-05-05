@@ -8,6 +8,6 @@ import sys
 @login_required
 def index(request):
     data = {'tabName': "events", 'pageTitle': "Events"}
-    log = get_log()
-    data['log'] = log
-    return render_to_response('base/layout.html', data, context_instance=RequestContext(request))
+    #log = get_log()
+    #data['log'] = log
+    return render_to_response('events/events.html', data, context_instance=RequestContext(request))
