@@ -7,16 +7,22 @@
     <head>
         <meta charset="utf-8">
         <title>{{ pageTitle }}</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <link href='{% static "bootstrap/css/bootstrap.css" %}' rel="stylesheet">
         <link href='{% static "bootstrap/css/bootstrap-responsive.css" %}' rel="stylesheet">
+        <style> 
+            body {
+                padding-top: 60px;
+            }
+        </style>
         {% block css %}
         {% endblock %}
     </head>
     <body>
            {% block navigation %}  {% endblock %}
            {% block content %} {% endblock %}
+           <script type="text/javascript" src='{% static "js/jquery-1.9.1.js" %}'></script>
+           <script type="text/javascript" src='{% static "bootstrap/js/bootstrap.js" %}'></script>
            {% block javascript %} {% endblock %}
-           <script type="text/src" src='{% static "js/jquery-1.9.1.js" %}'></script>
-           <script type="text/src" src='{% static "bootstrap/js/bootstrap.js" %}'></script>
     </body>
 </html>
