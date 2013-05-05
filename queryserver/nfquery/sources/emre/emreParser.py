@@ -87,7 +87,7 @@ if __name__ == "__main__":
     source_file = source_dir + '/emreSource.txt'
     output_type  = 3
     output_file = source_dir + '/emreOutput.txt'
-    
+    print output_file    
 
 
 #    # Parse Config File

@@ -347,26 +347,28 @@ class QueryManager:
    
     def executeSyslogParser(self, parser_script, configfile):
         self.qmlogger.debug('In %s' % sys._getframe().f_code.co_name)
-        returncode = subprocess.Popen([ 'python', parser_script, configfile])
-        if returncode == 0:
-            self.qmlogger.debug('syslog parser stopped.')
-        else:
-            self.qmlogger.debug('syslog parser returned with error')
+      #  returncode = subprocess.Popen([ 'python', parser_script, configfile])
+      #  if returncode == 0:
+      #      self.qmlogger.debug('syslog parser stopped.')
+      #  else:
+      #      self.qmlogger.debug('syslog parser returned with error')
  
-    def executeParsers(self, parser=None):
+    def executeParsers(self, parser=None, configfile="/etc/nfquery.conf"):
         self.qmlogger.debug('In %s' % sys._getframe().f_code.co_name)
         if parser is None:
             self.qmlogger.debug('running all parsers')
             for index in range(len(self.sources)):
                 try:
                     self.qmlogger.info('Running parser : %s' % self.sources[index].parser)
-                    returncode = subprocess.call([ 'python', 
-                                                   self.sources[index].parser] )
-                    if returncode == 0:
-                        self.QGenerator.createQuery(self.sources[index].parser)
-                    else:
-                        self.qmlogger.warning('Parser returned with error')
-                    #self.QGenerator.createQuery(self.sources[index].parser)
+                    popen = subprocess.Popen([ 'python', 
+                                                   self.sources[index].parser, self.sources[index].source_file,
+                                                   self.sources[index].source_name])
+            #        self.qmlogger.info('returncode : %s' % popen.returncode)
+            #        if popen.returncode == 0:
+            #            self.QGenerator.createQuery(self.sources[index].parser)
+            #        else:
+            #            self.qmlogger.warning('Parser returned with error')
+            #        #self.QGenerator.createQuery(self.sources[index].parser)
                 except Exception, e:
                     self.qmlogger.error('got exception: %r, exiting' % (e))
                     continue
@@ -376,12 +378,13 @@ class QueryManager:
                 if self.sources[index].parser == parser:
                     try:
                         self.qmlogger.info('Running parser : %s' % self.sources[index].parser)
-                        returncode = subprocess.call([ 'python', 
-                                                       self.sources[index].parser])
-                        if returncode == 0:
-                            self.QGenerator.createQuery(self.sources[index].parser)
-                        else:
-                            self.qmlogger.warning('Parser returned with error')
+                        popen = subprocess.Popen([ 'python', 
+                                                   self.sources[index].parser, self.sources[index].source_file,
+                                                   self.sources[index].source_name])
+                    #    if returncode == 0:
+                    #        self.QGenerator.createQuery(self.sources[index].parser)
+                    #    else:
+                    #        self.qmlogger.warning('Parser returned with error')
                     except Exception, e:
                         self.qmlogger.error('got exception: %r, exiting' % (e))
                         continue

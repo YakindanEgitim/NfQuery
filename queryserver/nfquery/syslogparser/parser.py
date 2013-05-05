@@ -36,6 +36,21 @@ class Pattern:
 
 
 class Parser:
+    def __init__(self, argv, configfile="/etc/nfquery.conf"):
+        # Parse Config File
+        try:
+            self.config = Config(configfile)
+        except ConfigError, e:
+            self.qslogger.info("Please check configuration file syntax")
+            self.qslogger.info("%s" % e)
+            sys.exit(1)
+
+        self.store = db.get_store(self.config.database)
+         
+        self.parserFile = argv['syslog_path']
+        self.host_name = argv['host']
+
+        self.lognorm = lognormalizer.LogNormalizer('/usr/share/logsparser/normalizers/')
 
     def insert_to_database(self, syslog_data):
         log_packet = LogPacket()
@@ -105,21 +120,6 @@ class Parser:
         self.store.add(log_packet) 
         self.store.commit()     
 
-    def __init__(self, configfile):
-        # Parse Config File
-        try:
-            self.config = Config(configfile)
-        except ConfigError, e:
-            self.qslogger.info("Please check configuration file syntax")
-            self.qslogger.info("%s" % e)
-            sys.exit(1)
-
-        self.store = db.get_store(self.config.database)
-         
-        self.parserFile = self.config.syslog[0].syslog_path
-        self.host_name = self.config.syslog[0].host
-
-        self.lognorm = lognormalizer.LogNormalizer(self.config.syslog[0].normalizers)
 
     def parse(self, logline):
         log = {'raw' : logline}
@@ -159,6 +159,7 @@ class Parser:
 
 
 if __name__ == "__main__":
-    configfile = sys.argv[1]
-    parser = Parser(configfile)
+    argv = {'host': sys.argv[2], 'syslog_path': sys.argv[1]}
+    #configfile = "/etc/nfquery.conf" #sys.argv[1]
+    parser = Parser(argv)
     parser.start()

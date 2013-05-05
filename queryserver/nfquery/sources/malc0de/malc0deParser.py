@@ -85,6 +85,7 @@ if __name__ == "__main__":
     source_name = 'malc0de'
     source_link = 'http://malc0de.com/bl/IP_Blacklist.txt'
     source_dir  =  os.path.dirname(__file__)
+    print source_dir
     source_file = source_dir + './malc0deSource.txt'
     output_type = 1 # Ip list
     output_file = source_dir + './malc0deOutput.txt'
