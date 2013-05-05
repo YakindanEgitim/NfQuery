@@ -6,5 +6,15 @@
 {% endblock %}
 
 {% block content %}
-{{log}}
+    <div class="row-fluid">
+        <div class="span6 offset3">
+            <div id="graph" style="width:800px;height:400px;"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript" src='{% static "js/jquery.flot.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/jquery.flot.time.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/events.js" %}'></script>
 {% endblock %}
