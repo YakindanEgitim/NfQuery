@@ -1,4 +1,5 @@
 #!/usr/bin/python
+
 #imports standart library
 import sys
 import re
@@ -10,7 +11,7 @@ from logsparser import lognormalizer
 
 from nfquery import db
 from nfquery.models import *
-
+from nfquery import logger
 
 class Pattern:
     def __init__(self, program):
@@ -42,6 +43,11 @@ class Parser:
             self.config = Config(configfile)
         except ConfigError, e:
             sys.exit(1)
+
+
+        self.syslogger = logger.createLogger('syslogparser')
+        self.syslogger.debug('In %s' % sys._getframe().f_code.co_name)
+        self.syslogger.info('Starting syslog parser')
 
         self.store = db.get_store(self.config.database)
          
@@ -125,6 +131,7 @@ class Parser:
         
         if 'program' in log.keys():
             if log['program'] == "apache":
+                self.syslogger.info("Parsing apache log")
                 self.pattern = Pattern("apache")
                 apache_line = log['raw'].split(":",3)[-1].lstrip()
                 matched = self.pattern.pattern.match(apache_line)
@@ -133,6 +140,7 @@ class Parser:
                     self.insert_to_database(log)
             
             if log['program'] == "vsftpd":
+                self.syslogger.info("Parsing ftp log")
                 vsftpd_line = log['body'].split(":")
                 vsftpd_line_first_part = vsftpd_line[0]
                 user = vsftpd_line_first_part.split("]")[0][1:]
