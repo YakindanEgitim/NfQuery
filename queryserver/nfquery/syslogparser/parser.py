@@ -41,8 +41,6 @@ class Parser:
         try:
             self.config = Config(configfile)
         except ConfigError, e:
-            self.qslogger.info("Please check configuration file syntax")
-            self.qslogger.info("%s" % e)
             sys.exit(1)
 
         self.store = db.get_store(self.config.database)
@@ -124,7 +122,7 @@ class Parser:
     def parse(self, logline):
         log = {'raw' : logline}
         self.lognorm.lognormalize(log)
-        print log
+        
         if 'program' in log.keys():
             if log['program'] == "apache":
                 self.pattern = Pattern("apache")
@@ -133,12 +131,8 @@ class Parser:
                 if matched:
                     log['information'] = matched.groupdict()
                     self.insert_to_database(log)
-                    print matched.groupdict()
-                    print matched.groupdict()['host']
-                    print "\n\n"
             
             if log['program'] == "vsftpd":
-                self.pattern = Pattern("vsftpd")
                 vsftpd_line = log['body'].split(":")
                 vsftpd_line_first_part = vsftpd_line[0]
                 user = vsftpd_line_first_part.split("]")[0][1:]
@@ -147,19 +141,15 @@ class Parser:
                 vsftpd_log = {"user" : user, "message" : message, "host" : client}
                 log['information'] = vsftpd_log
                 self.insert_to_database(log)
-                print vsftpd_log
-       
-        print "\n\n"
-        print "LOGG"
-        print log
-        print "\n\n"
+      
+ 
     def start(self):
         for logline in tailer.follow(open(self.parserFile)):
             self.parse(logline)
 
 
+
 if __name__ == "__main__":
     argv = {'host': sys.argv[2], 'syslog_path': sys.argv[1]}
-    #configfile = "/etc/nfquery.conf" #sys.argv[1]
     parser = Parser(argv)
     parser.start()
