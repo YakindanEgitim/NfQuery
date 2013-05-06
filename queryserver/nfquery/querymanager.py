@@ -1066,5 +1066,3 @@ class QueryManager:
         return True 
        
 
-    def pushSyslogData(self, syslog_data): 
-        self.qmlogger.info('Alert is already created')
