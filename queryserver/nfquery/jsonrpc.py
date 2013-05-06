@@ -232,8 +232,14 @@ class jsonRPCServer(jsonrpc.JSONRPC):
         self.queryManager.pushSyslogData(syslog_data)
 
     def jsonrpc_get_log(self):
+        self.rpclogger.debug('In %s' % sys._getframe().f_code.co_name)
         self.rpclogger.debug('GET LOG')
         return self.queryManager.get_log()
+
+
+    def jsonrpc_get_last_thirty_min_log(self):
+        self.rpclogger.debug('In %s' % sys._getframe().f_code.co_name)
+        return self.queryManager.get_last_thirty_min_log()
           
  
 #def getExampleService():

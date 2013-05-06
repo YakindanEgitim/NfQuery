@@ -23,7 +23,7 @@ import hashlib
 import subprocess
 import time
 import pprint
-from datetime import datetime
+from datetime import datetime, timedelta
 # nfquery imports
 import db
 import logger
@@ -535,6 +535,29 @@ class QueryManager:
    
 
 
+    def get_last_thirty_min_log(self):
+        log_packet = {}
+        now = datetime.now()
+        before_thirty_min = now - timedelta(minutes = 30)
+        log_packets =store.find(LogPacket, And(LogPacket.creation_time < now, LogPacket.creation_time > before_thirty_min) )
+        log_packets = self.store.find(LogPacket)
+        packet_number = 0
+        for packet in log_packets:
+            if packet.host.host_name not in log_packet.keys():
+                log_packet[packet.host.host_name] = {}
+            log_packet[packet.host.host_name][packet_number] = {}
+            log_packet[packet.host.host_name][packet_number]['user'] = packet.user.user
+            log_packet[packet.host.host_name][packet_number]['client'] = packet.client.client
+            log_packet[packet.host.host_name][packet_number]['creation_time'] = packet.creation_time
+            log_packet[packet.host.host_name][packet_number]['facility'] = packet.facility.facility
+            log_packet[packet.host.host_name][packet_number]['severity'] = packet.severity.severity
+            log_packet[packet.host.host_name][packet_number]['program'] = packet.program.name
+            log_packet[packet.host.host_name][packet_number]['host'] = packet.host.host_name
+            packet_number = packet_number + 1
+        print log_packet
+        return log_packet
+
+
     def get_log(self):
         log_packet = {} 
        
@@ -546,7 +569,7 @@ class QueryManager:
             log_packet[packet.host.host_name][packet_number] = {}
             log_packet[packet.host.host_name][packet_number]['user'] = packet.user.user
             log_packet[packet.host.host_name][packet_number]['client'] = packet.client.client
-            log_packet[packet.host.host_name][packet_number]['creation_time'] = packet.creation_time.time 
+            log_packet[packet.host.host_name][packet_number]['creation_time'] = packet.creation_time 
             log_packet[packet.host.host_name][packet_number]['facility'] = packet.facility.facility
             log_packet[packet.host.host_name][packet_number]['severity'] = packet.severity.severity
             log_packet[packet.host.host_name][packet_number]['program'] = packet.program.name
