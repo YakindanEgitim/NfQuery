@@ -537,10 +537,10 @@ class QueryManager:
 
     def get_last_thirty_min_log(self):
         log_packet = {}
-        now = datetime.now()
-        before_thirty_min = now - timedelta(minutes = 30)
-        log_packets =store.find(LogPacket, And(LogPacket.creation_time < now, LogPacket.creation_time > before_thirty_min) )
-        log_packets = self.store.find(LogPacket)
+        now = int(datetime.now().strftime("%s"))
+        before_thirty_min = now - (30 * 60)
+
+        log_packets = self.store.find(LogPacket, And(LogPacket.creation_time < now, LogPacket.creation_time > before_thirty_min) )
         packet_number = 0
         for packet in log_packets:
             if packet.host.host_name not in log_packet.keys():
