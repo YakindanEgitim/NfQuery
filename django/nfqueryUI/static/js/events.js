@@ -1,70 +1,79 @@
-var data = [{
-     "label": "scott",
-     "data": [[1317427200000-5000000*3, "17017"], [1317513600000-5000000*5, "77260"]]
- },
- {
-     "label": "martin",
-     "data": [[1317427200000-5000000*2, "96113"], [1317513600000-5000000*4, "33407"]]
- },
- {
-     "label": "solonio",
-     "data": [[1317427200000-5000000, "13041"], [1317513600000-5000000*3, "82943"]]
- },
- {
-     "label": "swarowsky",
-     "data": [[1317427200000, "83479"], [1317513600000-5000000*2, "96357"], [1317600000000-5000000, "55431"]]
- },
- {
-     "label": "elvis",
-     "data": [[1317427200000+5000000, "40114"], [1317513600000-5000000*1, "47065"]]
- },
- {
-     "label": "alan",
-     "data": [[1317427200000+5000000*2, "82504"], [1317513600000, "46577"]]
- },
- {
-     "label": "tony",
-     "data": [[1317513600000+5000000, "88967"]]
- },
- {
-     "label": "bill",
-     "data": [[1317513600000+5000000*2, "60187"], [1317600000000, "39090"]]
- },
- {
-     "label": "tim",
-     "data": [[1317513600000+5000000*3, "95382"], [1317600000000+5000000, "89699"]]
- },
- {
-     "label": "britney",
-     "data": [[1317513600000+5000000*4, "76772"]]
- },
- {
-     "label": "logan",
-     "data": [[1317513600000+5000000*5, "88674"]]
- }
-];
- 
-var options = {
-    series: {
-        bars: {
-            show: true,
-            barWidth: 60 * 60 * 1000,
-            align: 'center'
-        },
-    },
-    yaxes: {
-        min: 0
-    },
-    xaxis: {
-        mode: 'time',
-        timeformat: "%b %d",
-        minTickSize: [1, "month"],
-        tickSize: [1, "day"],
-        autoscaleMargin: .10
-    }
-};
- 
 $(function() {
-    alert("serhat");
-    $.plot($('#graph'), data, options);
+        // We use an inline data source in the example, usually data would
+        // be fetched from a server
+
+        var data = [],
+            totalPoints = 300;
+
+        function getLogData() {
+            
+            //$.get("/events/getseverity/", {}, function(data){
+            //    alert(data);
+            //});    
+            if (data.length > 0)
+                data = data.slice(1);
+
+            // Do a random walk
+
+            while (data.length < totalPoints) {
+
+                var prev = data.length > 0 ? data[data.length - 1] : 50,
+                    y = prev + Math.random() * 10 - 5;
+
+                if (y < 0) {
+                    y = 0;
+                } else if (y > 100) {
+                    y = 100;
+                }
+
+                data.push(y);
+            }
+
+            // Zip the generated y values with the x values
+
+            var res = [];
+            for (var i = 0; i < data.length; ++i) {
+                res.push([i, data[i]])
+            }
+
+            return res;
+        }
+
+        // Set up the control widget
+
+        var updateInterval = 500;
+        //$("#updateInterval").val(updateInterval).change(function () {
+        //    var v = $(this).val();
+        //    if (v && !isNaN(+v)) {
+        //        updateInterval = +v;
+        //        if (updateInterval < 1) {
+        //            updateInterval = 1;
+        //        } else if (updateInterval > 2000) {
+        //            updateInterval = 2000;
+        //        }
+        //        $(this).val("" + updateInterval);
+        //    }
+        //});
+
+        var plot = $.plot("#graph", [ 60, 100 ], {
+            series: {
+                shadowSize: 0   // Drawing is faster without shadows
+            },
+            xaxis: {
+                show: false
+            }
+        });
+
+        function update() {
+
+            plot.setData([getLogData()]);
+
+            // Since the axes don't change, we don't need to call plot.setupGrid()
+
+            plot.draw();
+            setTimeout(update, updateInterval);
+        }
+
+        update();
+
 });
