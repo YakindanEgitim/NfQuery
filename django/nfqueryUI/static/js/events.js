@@ -1,79 +1,80 @@
+var selectedSeverityLevel = 5;
 $(function() {
         // We use an inline data source in the example, usually data would
         // be fetched from a server
 
-        var data = [],
-            totalPoints = 300;
+        var data = {};
+        var totalPoints = 300;
+        var latest_timestamp = 0
+        var host = "127.0.0.1";
+
+        data[0] = [];
+        data[1] = [];
+        data[2] = [];
+        data[3] = [];
+        data[4] = [];
+        data[5] = [];
+        data[6] = [];
+        data[7] = [];
 
         function getLogData() {
             
-            //$.get("/events/getseverity/", {}, function(data){
-            //    alert(data);
-            //});    
-            if (data.length > 0)
-                data = data.slice(1);
-
-            // Do a random walk
-
-            while (data.length < totalPoints) {
-
-                var prev = data.length > 0 ? data[data.length - 1] : 50,
-                    y = prev + Math.random() * 10 - 5;
-
-                if (y < 0) {
-                    y = 0;
-                } else if (y > 100) {
-                    y = 100;
+            for(var severity_level in data){
+                if (data[severity_level].length == 0){
+                    while( data[severity_level].length < totalPoints){
+                        data[severity_level].push(0);
+                    }
+                }else if (data[severity_level].length == totalPoints){
+                    data[severity_level] = data[severity_level].slice(1);
                 }
-
-                data.push(y);
             }
+            
+            $.get("/events/gettotalseverity/", {latest_timestamp:latest_timestamp, host:host}, function(severity){
+                latest_timestamp = severity['latest_timestamp'];
+                data[0].push((severity[host]) ? severity[host][0] : 0);
+                data[1].push((severity[host]) ? severity[host][1] : 0);
+                data[2].push((severity[host]) ? severity[host][2] : 0);
+                data[3].push((severity[host]) ? severity[host][3] : 0);
+                data[4].push((severity[host]) ? severity[host][4] : 0);
+                data[5].push((severity[host]) ? severity[host][5] : 0);
+                data[6].push((severity[host]) ? severity[host][6] : 0);
+                data[7].push((severity[host]) ? severity[host][7] : 0);
+            });    
 
             // Zip the generated y values with the x values
 
-            var res = [];
-            for (var i = 0; i < data.length; ++i) {
-                res.push([i, data[i]])
+            var res = {};
+            for (var severity_level in data){
+                res[severity_level] = [];
+                for (var i = 0; i < data[severity_level].length; ++i) {
+                    res[severity_level].push([i, data[severity_level][i]]);
+                }
             }
-
             return res;
         }
 
-        // Set up the control widget
 
-        var updateInterval = 500;
-        //$("#updateInterval").val(updateInterval).change(function () {
-        //    var v = $(this).val();
-        //    if (v && !isNaN(+v)) {
-        //        updateInterval = +v;
-        //        if (updateInterval < 1) {
-        //            updateInterval = 1;
-        //        } else if (updateInterval > 2000) {
-        //            updateInterval = 2000;
-        //        }
-        //        $(this).val("" + updateInterval);
-        //    }
-        //});
-
-        var plot = $.plot("#graph", [ 60, 100 ], {
-            series: {
-                shadowSize: 0   // Drawing is faster without shadows
-            },
-            xaxis: {
-                show: false
-            }
-        });
+        var updateInterval = 1000;
 
         function update() {
-
-            plot.setData([getLogData()]);
-
-            // Since the axes don't change, we don't need to call plot.setupGrid()
-
-            plot.draw();
+            graphData = getLogData();
+            var plot = $.plot("#graph", [graphData[selectedSeverityLevel]], {
+                series: {
+                    shadowSize: 0
+                },
+                xaxis: {
+                    show: false
+                }
+            });
             setTimeout(update, updateInterval);
         }
 
         update();
 
+});
+
+$(document).ready(function(){
+    $("#severityLevel").change(function(){
+        selectedSeverityLevel = parseInt($(this).val());
+    });
 });

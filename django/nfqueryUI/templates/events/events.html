@@ -8,8 +8,20 @@
 {% block content %}
 <div class="container">
     <div class="row-fluid">
-        <div class="span6 offset2">
-            <div id="graph" style="width:800px;height:400px;"></div>
+        <div class="span6">
+            <div id="graph" style="width:100%;height:400px;"></div>
+        </div>
+        <div class="span2" >
+            <select id="severityLevel">
+              <option value="0">Emergency</option>
+              <option value="1">Alert</option>
+              <option value="2">Critical</option>
+              <option value="3">Error</option>
+              <option value="4">Warning</option>
+              <option value="5" selected="selected">Notice</option>
+              <option value="6">Informational</option>
+              <option value="7">Debug</option>
+            </select> 
         </div>
     </div>
 </div>
