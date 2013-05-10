@@ -114,12 +114,6 @@ class QueryServer:
 
 
 
-    def startSyslogParser(self):
-        '''
-            Start Syslog Parser
-        '''
-        self.queryManager.executeSyslogParser(self.config.syslog[0].parser_script,self.configfile)
-
        
     def startJSONRPCServer(self):
         '''
@@ -179,9 +173,6 @@ class QueryServer:
         # Start Scheduler
         self.startScheduler()
 
-
-        #Start syslog parser
-        self.startSyslogParser()
 
         # Set shutdown handler
         atexit.register(self.stop)

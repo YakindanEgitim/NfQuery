@@ -1,4 +1,5 @@
 #!/usr/bin/python
+
 #imports standart library
 import sys
 import re
@@ -10,7 +11,7 @@ from logsparser import lognormalizer
 
 from nfquery import db
 from nfquery.models import *
-
+from nfquery import logger
 
 class Pattern:
     def __init__(self, program):
@@ -36,6 +37,24 @@ class Pattern:
 
 
 class Parser:
+    def __init__(self, argv, configfile="/etc/nfquery.conf"):
+        # Parse Config File
+        try:
+            self.config = Config(configfile)
+        except ConfigError, e:
+            sys.exit(1)
+
+
+        self.syslogger = logger.createLogger('syslogparser')
+        self.syslogger.debug('In %s' % sys._getframe().f_code.co_name)
+        self.syslogger.info('Starting syslog parser')
+
+        self.store = db.get_store(self.config.database)
+         
+        self.parserFile = argv['syslog_path']
+        self.host_name = argv['host']
+
+        self.lognorm = lognormalizer.LogNormalizer('/usr/share/logsparser/normalizers/')
 
     def insert_to_database(self, syslog_data):
         log_packet = LogPacket()
@@ -75,13 +94,14 @@ class Parser:
             log_packet.facility_id = facility.id
         
         if 'date' in syslog_data.keys():
-            date = self.store.find(Time, Time.time == syslog_data['date']).one()
-            if date == None:
-                date = Time()
-                date.time = syslog_data['date']
-                self.store.add(date) 
-                self.store.flush()     
-            log_packet.creation_time_id = date.id
+            #date = self.store.find(Time, Time.time == syslog_data['date']).one()
+            #if date == None:
+            #    date = Time()
+            #    date.time = syslog_data['date']
+            #    self.store.add(date) 
+            #    self.store.flush()    
+            time_stamp = syslog_data['date'].strftime("%s") 
+            log_packet.creation_time = int(time_stamp)
         
         if 'information' in syslog_data.keys():
             informations = syslog_data['information']
@@ -105,40 +125,23 @@ class Parser:
         self.store.add(log_packet) 
         self.store.commit()     
 
-    def __init__(self, configfile):
-        # Parse Config File
-        try:
-            self.config = Config(configfile)
-        except ConfigError, e:
-            self.qslogger.info("Please check configuration file syntax")
-            self.qslogger.info("%s" % e)
-            sys.exit(1)
-
-        self.store = db.get_store(self.config.database)
-         
-        self.parserFile = self.config.syslog[0].syslog_path
-        self.host_name = self.config.syslog[0].host
-
-        self.lognorm = lognormalizer.LogNormalizer(self.config.syslog[0].normalizers)
 
     def parse(self, logline):
         log = {'raw' : logline}
         self.lognorm.lognormalize(log)
-        print log
+        
         if 'program' in log.keys():
             if log['program'] == "apache":
+                self.syslogger.info("Parsing apache log")
                 self.pattern = Pattern("apache")
                 apache_line = log['raw'].split(":",3)[-1].lstrip()
                 matched = self.pattern.pattern.match(apache_line)
                 if matched:
                     log['information'] = matched.groupdict()
                     self.insert_to_database(log)
-                    print matched.groupdict()
-                    print matched.groupdict()['host']
-                    print "\n\n"
             
             if log['program'] == "vsftpd":
-                self.pattern = Pattern("vsftpd")
+                self.syslogger.info("Parsing ftp log")
                 vsftpd_line = log['body'].split(":")
                 vsftpd_line_first_part = vsftpd_line[0]
                 user = vsftpd_line_first_part.split("]")[0][1:]
@@ -147,18 +150,15 @@ class Parser:
                 vsftpd_log = {"user" : user, "message" : message, "host" : client}
                 log['information'] = vsftpd_log
                 self.insert_to_database(log)
-                print vsftpd_log
-       
-        print "\n\n"
-        print "LOGG"
-        print log
-        print "\n\n"
+      
+ 
     def start(self):
         for logline in tailer.follow(open(self.parserFile)):
             self.parse(logline)
 
 
+
 if __name__ == "__main__":
-    configfile = sys.argv[1]
-    parser = Parser(configfile)
+    argv = {'host': sys.argv[2], 'syslog_path': sys.argv[1]}
+    parser = Parser(argv)
     parser.start()
