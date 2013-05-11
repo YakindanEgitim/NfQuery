@@ -53,11 +53,11 @@ class Parser:
          
         self.parserFile = argv['syslog_path']
         self.host_name = argv['host']
-
         self.lognorm = lognormalizer.LogNormalizer('/usr/share/logsparser/normalizers/')
 
     def insert_to_database(self, syslog_data):
         log_packet = LogPacket()
+        print self.host_name
         host = self.store.find(Host, Host.host_name == unicode(self.host_name)).one() 
         if host == None:
             host = Host()

@@ -585,10 +585,10 @@ class QueryManager:
         print log_packet 
         return log_packet
 
-    def get_total_severity(self, timestamp=None, host_name=None):
+    def get_total_severity(self, timestamp, host_name=None):
         self.store.rollback()
         total_severity = {}
-        if timestamp == None:
+        if timestamp == "0":
             now = datetime.now()
             now = int(now.strftime("%s"))
             timestamp_pre = now - 2
@@ -599,7 +599,10 @@ class QueryManager:
             timestamp_next = timestamp + 1
         print timestamp_pre
         print timestamp_next
-        log_packets = self.store.find(LogPacket, LogPacket.creation_time >= timestamp_pre, LogPacket.creation_time <= timestamp_next)
+        if host_name == None:
+            log_packets = self.store.find(LogPacket, LogPacket.creation_time >= timestamp_pre, LogPacket.creation_time <= timestamp_next)
+        else:
+            log_packets = self.store.find(LogPacket, LogPacket.creation_time >= timestamp_pre, LogPacket.creation_time <= timestamp_next, LogPacket.host.host_name == unicode(host_name))
         print "COUNT ",self.store.find(LogPacket).count()
         packet_number = 0
         severity_list = range(8)
