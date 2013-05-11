@@ -586,7 +586,11 @@ class QueryManager:
         return log_packet
 
 
-   
+    def get_all_host(self):
+        hosts = self.store.find(Host.host_name)        
+        return list(hosts)
+
+
     def get_total_severity(self, timestamp, host_name=None):
         print "TIMESTAMPT:",timestamp
         self.store.rollback()

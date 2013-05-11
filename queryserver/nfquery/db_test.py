@@ -29,22 +29,22 @@ def get_store():
 
 store = get_store()
 
+print list(store.find(Host.host_name))
 
 
-
-total_severity = {}
-log_packets = store.find(LogPacket,LogPacket.creation_time >1368304233,LogPacket.creation_time<=1368304234)
-print log_packets.count()
-packet_number = 0
-severity_list = range(8)
-for packet in log_packets:
-    if packet.host.host_name not in total_severity.keys():
-        total_severity[packet.host.host_name] = {}
-        for i in severity_list:
-            total_severity[packet.host.host_name][str(i)] = 0
-    total_severity[packet.host.host_name][packet.severity.severity] += 1
-print total_severity
-
+#total_severity = {}
+#log_packets = store.find(LogPacket,LogPacket.creation_time >1368304233,LogPacket.creation_time<=1368304234)
+#print log_packets.count()
+#packet_number = 0
+#severity_list = range(8)
+#for packet in log_packets:
+#    if packet.host.host_name not in total_severity.keys():
+#        total_severity[packet.host.host_name] = {}
+#        for i in severity_list:
+#            total_severity[packet.host.host_name][str(i)] = 0
+#    total_severity[packet.host.host_name][packet.severity.severity] += 1
+#print total_severity
+#
 
 
 
