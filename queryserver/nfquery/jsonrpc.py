@@ -235,7 +235,12 @@ class jsonRPCServer(jsonrpc.JSONRPC):
         self.rpclogger.debug('In %s' % sys._getframe().f_code.co_name)
         self.rpclogger.debug('GET LOG')
         return self.queryManager.get_log()
-  
+ 
+    def jsonrp_get_all_host(self):
+        self.rpclogger.debug('In %s' % sys._getframe().f_code.co_name)
+        self.rpclogger.debug('GET HOSTS')
+        return self.queryManager.get_all_host()
+ 
     def jsonrpc_get_total_severity(self, timestamp, host=None):
         self.rpclogger.debug('In %s' % sys._getframe().f_code.co_name)
         self.rpclogger.debug('GET TOTAL SEVERITY')
