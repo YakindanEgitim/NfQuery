@@ -585,25 +585,29 @@ class QueryManager:
         print log_packet 
         return log_packet
 
+
+   
     def get_total_severity(self, timestamp, host_name=None):
+        print "TIMESTAMPT:",timestamp
         self.store.rollback()
         total_severity = {}
         if timestamp == "0":
             now = datetime.now()
             now = int(now.strftime("%s"))
-            timestamp_pre = now - 2
-            timestamp_next = now - 1
+            timestamp_pre = now - 10
+            timestamp_next = now - 9
         else:
+            print timestamp
             timestamp = int(timestamp)
             timestamp_pre = timestamp
-            timestamp_next = timestamp + 1
-        print timestamp_pre
-        print timestamp_next
-        if host_name == None:
-            log_packets = self.store.find(LogPacket, LogPacket.creation_time >= timestamp_pre, LogPacket.creation_time <= timestamp_next)
-        else:
-            log_packets = self.store.find(LogPacket, LogPacket.creation_time >= timestamp_pre, LogPacket.creation_time <= timestamp_next, LogPacket.host.host_name == unicode(host_name))
-        print "COUNT ",self.store.find(LogPacket).count()
+            timestamp_next = timestamp + 1 
+        #if host_name == None:
+        print "TIMES: ",timestamp_pre,":",timestamp_next
+        log_packets = self.store.find(LogPacket, LogPacket.creation_time >= timestamp_pre, LogPacket.creation_time <= timestamp_next)
+        print "COUNT packet: ", log_packets.count()
+        print "COUNT: ",self.store.find(LogPacket).count()
+        #else:
+         #   log_packets = self.store.find(LogPacket, LogPacket.creation_time >= timestamp_pre, LogPacket.creation_time <= timestamp_next, LogPacket.host.host_name == unicode(host_name))
         packet_number = 0
         severity_list = range(8)
         for packet in log_packets:

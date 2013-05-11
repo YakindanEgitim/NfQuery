@@ -57,7 +57,6 @@ class Parser:
 
     def insert_to_database(self, syslog_data):
         log_packet = LogPacket()
-        print self.host_name
         host = self.store.find(Host, Host.host_name == unicode(self.host_name)).one() 
         if host == None:
             host = Host()
@@ -102,7 +101,6 @@ class Parser:
             #    self.store.flush()    
             time_stamp = syslog_data['date'].strftime("%s") 
             log_packet.creation_time = int(time_stamp)
-            print "kaydedilen veri:",time_stamp
         
         if 'information' in syslog_data.keys():
             informations = syslog_data['information']
@@ -125,7 +123,6 @@ class Parser:
                 log_packet.client_id = client.id
         self.store.add(log_packet) 
         self.store.commit()     
-        print "syslog time: ", datetime.datetime.now().strftime("%s")
 
     def parse(self, logline):
         log = {'raw' : logline}

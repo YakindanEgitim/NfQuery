@@ -33,7 +33,8 @@ store = get_store()
 
 
 total_severity = {}
-log_packets = store.find(LogPacket)
+log_packets = store.find(LogPacket,LogPacket.creation_time >1368304233,LogPacket.creation_time<=1368304234)
+print log_packets.count()
 packet_number = 0
 severity_list = range(8)
 for packet in log_packets:
