@@ -9,7 +9,9 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-RPC_URL = "https://127.0.0.1:7777/"
+RPC_URL = "https://192.168.1.2:7777/"
+#RPC_URL = "https://localhost:7777/"
+#RPC_URL = "https://78.178.150.255:7777/"
 #path to certificate and key files that need to connect queryserver.
 ROOT_CERTIFICATE = "/home/ahmetcan/NfQuery/queryserver/cfg/certs/cacert.pem"
 CLIENT_CERTIFICATE = "/home/ahmetcan/NfQuery/queryserver/cfg/certs/plugin-cert.pem"

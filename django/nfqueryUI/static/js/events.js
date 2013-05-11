@@ -1,70 +1,80 @@
-var data = [{
-     "label": "scott",
-     "data": [[1317427200000-5000000*3, "17017"], [1317513600000-5000000*5, "77260"]]
- },
- {
-     "label": "martin",
-     "data": [[1317427200000-5000000*2, "96113"], [1317513600000-5000000*4, "33407"]]
- },
- {
-     "label": "solonio",
-     "data": [[1317427200000-5000000, "13041"], [1317513600000-5000000*3, "82943"]]
- },
- {
-     "label": "swarowsky",
-     "data": [[1317427200000, "83479"], [1317513600000-5000000*2, "96357"], [1317600000000-5000000, "55431"]]
- },
- {
-     "label": "elvis",
-     "data": [[1317427200000+5000000, "40114"], [1317513600000-5000000*1, "47065"]]
- },
- {
-     "label": "alan",
-     "data": [[1317427200000+5000000*2, "82504"], [1317513600000, "46577"]]
- },
- {
-     "label": "tony",
-     "data": [[1317513600000+5000000, "88967"]]
- },
- {
-     "label": "bill",
-     "data": [[1317513600000+5000000*2, "60187"], [1317600000000, "39090"]]
- },
- {
-     "label": "tim",
-     "data": [[1317513600000+5000000*3, "95382"], [1317600000000+5000000, "89699"]]
- },
- {
-     "label": "britney",
-     "data": [[1317513600000+5000000*4, "76772"]]
- },
- {
-     "label": "logan",
-     "data": [[1317513600000+5000000*5, "88674"]]
- }
-];
- 
-var options = {
-    series: {
-        bars: {
-            show: true,
-            barWidth: 60 * 60 * 1000,
-            align: 'center'
-        },
-    },
-    yaxes: {
-        min: 0
-    },
-    xaxis: {
-        mode: 'time',
-        timeformat: "%b %d",
-        minTickSize: [1, "month"],
-        tickSize: [1, "day"],
-        autoscaleMargin: .10
-    }
-};
- 
+var selectedSeverityLevel = 5;
 $(function() {
-    alert("serhat");
-    $.plot($('#graph'), data, options);
+        // We use an inline data source in the example, usually data would
+        // be fetched from a server
+
+        var data = {};
+        var totalPoints = 300;
+        var latest_timestamp = 0
+        var host = "127.0.0.1";
+
+        data[0] = [];
+        data[1] = [];
+        data[2] = [];
+        data[3] = [];
+        data[4] = [];
+        data[5] = [];
+        data[6] = [];
+        data[7] = [];
+
+        function getLogData() {
+            
+            for(var severity_level in data){
+                if (data[severity_level].length == 0){
+                    while( data[severity_level].length < totalPoints){
+                        data[severity_level].push(0);
+                    }
+                }else if (data[severity_level].length == totalPoints){
+                    data[severity_level] = data[severity_level].slice(1);
+                }
+            }
+            
+            $.get("/events/gettotalseverity/", {latest_timestamp:latest_timestamp, host:host}, function(severity){
+                latest_timestamp = severity['latest_timestamp'];
+                data[0].push((severity[host]) ? severity[host][0] : 0);
+                data[1].push((severity[host]) ? severity[host][1] : 0);
+                data[2].push((severity[host]) ? severity[host][2] : 0);
+                data[3].push((severity[host]) ? severity[host][3] : 0);
+                data[4].push((severity[host]) ? severity[host][4] : 0);
+                data[5].push((severity[host]) ? severity[host][5] : 0);
+                data[6].push((severity[host]) ? severity[host][6] : 0);
+                data[7].push((severity[host]) ? severity[host][7] : 0);
+            });    
+
+            // Zip the generated y values with the x values
+
+            var res = {};
+            for (var severity_level in data){
+                res[severity_level] = [];
+                for (var i = 0; i < data[severity_level].length; ++i) {
+                    res[severity_level].push([i, data[severity_level][i]]);
+                }
+            }
+            return res;
+        }
+
+
+        var updateInterval = 1000;
+
+        function update() {
+            graphData = getLogData();
+            var plot = $.plot("#graph", [graphData[selectedSeverityLevel]], {
+                series: {
+                    shadowSize: 0
+                },
+                xaxis: {
+                    show: false
+                }
+            });
+            setTimeout(update, updateInterval);
+        }
+
+        update();
+
+});
+
+$(document).ready(function(){
+    $("#severityLevel").change(function(){
+        selectedSeverityLevel = parseInt($(this).val());
+    });
 });
