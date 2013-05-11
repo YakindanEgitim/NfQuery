@@ -575,8 +575,44 @@ class QueryManager:
             log_packet[packet.host.host_name][packet_number]['program'] = packet.program.name
             log_packet[packet.host.host_name][packet_number]['host'] = packet.host.host_name
             packet_number = packet_number + 1
-        print log_packet
+        severit_list = range(8)
+        for host in log_packet:
+             log_packet[host]["severity_info"]
+             for i in severity:
+                 log_packet[host]["severity_info"][str(i)] = 0
+             for packet in log_packet[host]:
+		 log_packet[host]["severity_info"][log_packet[host][packet][severity]] += 1
+        print log_packet 
         return log_packet
+
+    def get_total_severity(self, timestamp=None, host_name=None):
+        self.store.rollback()
+        total_severity = {}
+        if timestamp == None:
+            now = datetime.now()
+            now = int(now.strftime("%s"))
+            timestamp_pre = now - 2
+            timestamp_next = now - 1
+        else:
+            timestamp = int(timestamp)
+            timestamp_pre = timestamp
+            timestamp_next = timestamp + 1
+        print timestamp_pre
+        print timestamp_next
+        log_packets = self.store.find(LogPacket, LogPacket.creation_time >= timestamp_pre, LogPacket.creation_time <= timestamp_next)
+        print "COUNT ",self.store.find(LogPacket).count()
+        packet_number = 0
+        severity_list = range(8)
+        for packet in log_packets:
+            if packet.host.host_name not in total_severity.keys():
+                total_severity[packet.host.host_name] = {}
+                for i in severity_list:
+                    total_severity[packet.host.host_name][str(i)] = 0
+            total_severity[packet.host.host_name][packet.severity.severity] += 1
+        total_severity["latest_timestamp"] = timestamp_next
+        print total_severity
+      
+        return total_severity
 
     def getPluginId(self, ip_address):
         self.qmlogger.debug('In %s' % sys._getframe().f_code.co_name)

@@ -12,7 +12,7 @@ from logsparser import lognormalizer
 from nfquery import db
 from nfquery.models import *
 from nfquery import logger
-
+import datetime
 class Pattern:
     def __init__(self, program):
         if (program == "apache"):
@@ -102,6 +102,7 @@ class Parser:
             #    self.store.flush()    
             time_stamp = syslog_data['date'].strftime("%s") 
             log_packet.creation_time = int(time_stamp)
+            print "kaydedilen veri:",time_stamp
         
         if 'information' in syslog_data.keys():
             informations = syslog_data['information']
@@ -124,7 +125,7 @@ class Parser:
                 log_packet.client_id = client.id
         self.store.add(log_packet) 
         self.store.commit()     
-
+        print "syslog time: ", datetime.datetime.now().strftime("%s")
 
     def parse(self, logline):
         log = {'raw' : logline}

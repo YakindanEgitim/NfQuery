@@ -25,7 +25,7 @@ class JungoHttpService(internet.TCPServer):
 
                           # substitute with your custom WSGIResource
         sharedRoot.WSGI = wsgi.WSGIResource(reactor, pool, application)
-        sharedRoot.putChild('static', static.File("/home/serhat/NfQuery/django/nfqueryUI/static"))
+        sharedRoot.putChild('static', static.File("/home/ahmetcan/NfQuery/django/nfqueryUI/static"))
         internet.TCPServer.__init__(self, port, server.Site(sharedRoot))
         self.setName("WSGI/HttpJungo")
         self.pool = pool
