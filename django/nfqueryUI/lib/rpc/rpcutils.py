@@ -10,3 +10,7 @@ def get_total_severity_from_queryserver(latest_timestamp, host):
     result = client.call('get_total_severity', latest_timestamp, host)
     return result
 
+def get_total_severity_from_queryserver(latest_timestamp):
+    client = Client()
+    result = client.call('get_hosts')
+    return result
