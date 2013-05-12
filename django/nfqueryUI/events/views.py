@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
-from nfqueryUI.lib.rpc.rpcutils import get_total_severity_from_queryserver
+from nfqueryUI.lib.rpc.rpcutils import get_total_severity_from_queryserver, get_hosts_from_queryserver
 from django.utils import simplejson
 from django.utils.decorators import method_decorator
 
@@ -18,4 +18,5 @@ def get_severity(request):
 @login_required
 def index(request):
     data = {'tabName': "events", 'pageTitle': "Events"}
+    data['hosts'] = get_hosts_from_queryserver()
     return render_to_response('events/events.html', data, context_instance=RequestContext(request))
