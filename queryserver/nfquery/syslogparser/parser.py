@@ -93,12 +93,6 @@ class Parser:
             log_packet.facility_id = facility.id
         
         if 'date' in syslog_data.keys():
-            #date = self.store.find(Time, Time.time == syslog_data['date']).one()
-            #if date == None:
-            #    date = Time()
-            #    date.time = syslog_data['date']
-            #    self.store.add(date) 
-            #    self.store.flush()    
             time_stamp = syslog_data['date'].strftime("%s") 
             log_packet.creation_time = int(time_stamp)
         
