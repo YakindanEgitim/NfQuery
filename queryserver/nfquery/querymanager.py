@@ -353,8 +353,7 @@ class QueryManager:
                 try:
                     self.qmlogger.info('Running parser : %s' % self.sources[index].parser)
                     popen = subprocess.Popen([ 'python', 
-                                                   self.sources[index].parser, self.sources[index].source_file,
-                                                   self.sources[index].source_name])
+                                                   self.sources[index].parser, self.sources[index].source_file)
             #        self.qmlogger.info('returncode : %s' % popen.returncode)
             #        if popen.returncode == 0:
             #            self.QGenerator.createQuery(self.sources[index].parser)
