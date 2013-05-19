@@ -52,15 +52,15 @@ class Parser:
         self.store = db.get_store(self.config.database)
          
         self.parserFile = argv['syslog_path']
-        self.host_name = argv['host']
         self.lognorm = lognormalizer.LogNormalizer('/usr/share/logsparser/normalizers/')
 
     def insert_to_database(self, syslog_data):
+        print "syslog_data",syslog_data
         log_packet = LogPacket()
-        host = self.store.find(Host, Host.host_name == unicode(self.host_name)).one() 
+        host = self.store.find(Host, Host.host_name == unicode(syslog_data["source"])).one() 
         if host == None:
             host = Host()
-            host.host_name = unicode(self.host_name)
+            host.host_name = unicode(syslog_data["source"])
             self.store.add(host)      
             self.store.flush()    
         log_packet.host_name_id = host.id
@@ -121,7 +121,6 @@ class Parser:
     def parse(self, logline):
         log = {'raw' : logline}
         self.lognorm.lognormalize(log)
-        
         if 'program' in log.keys():
             if log['program'] == "apache":
                 self.syslogger.info("Parsing apache log")
@@ -131,7 +130,6 @@ class Parser:
                 if matched:
                     log['information'] = matched.groupdict()
                     self.insert_to_database(log)
-            
             if log['program'] == "vsftpd":
                 self.syslogger.info("Parsing ftp log")
                 vsftpd_line = log['body'].split(":")
@@ -139,6 +137,7 @@ class Parser:
                 user = vsftpd_line_first_part.split("]")[0][1:]
                 message = " ".join(vsftpd_line_first_part.split()[1:])
                 client = vsftpd_line[1].lstrip().split()[1][1:-1]
+                source = log['source']
                 vsftpd_log = {"user" : user, "message" : message, "host" : client}
                 log['information'] = vsftpd_log
                 self.insert_to_database(log)
@@ -151,6 +150,6 @@ class Parser:
 
 
 if __name__ == "__main__":
-    argv = {'host': sys.argv[2], 'syslog_path': sys.argv[1]}
+    argv = {'syslog_path': sys.argv[1]}
     parser = Parser(argv)
     parser.start()
