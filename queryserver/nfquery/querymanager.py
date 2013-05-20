@@ -585,7 +585,7 @@ class QueryManager:
         return log_packet
 
 
-    def get_all_host(self):
+    def get_all_hosts(self):
         hosts = self.store.find(Host.host_name)        
         return list(hosts)
 
