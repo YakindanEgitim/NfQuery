@@ -604,11 +604,19 @@ class QueryManager:
             timestamp = int(timestamp)
             timestamp_pre = timestamp
             timestamp_next = timestamp + 1 
-        #if host_name == None:
+
         print "TIMES: ",timestamp_pre,":",timestamp_next
-        log_packets = self.store.find(LogPacket, LogPacket.creation_time >= timestamp_pre, LogPacket.creation_time <= timestamp_next)
+        host = self.store.find(Host, Host.host_name == host).one()
+        if quantity:
+            log_packets = self.store.find(LogPacket, LogPacket.host == host,
+                                          LogPacket.creation_time >= timestamp_pre, LogPacket.creation_time <= timestamp_next)
+            log_packets = [log for log in log_packets.order_by(Desc(LogPacket.creation_time))[:20]]
+        else:
+            log_packets = self.store.find(LogPacket, LogPacket.host == host, LogPacket.creation_time >= timestamp_pre, LogPacket.creation_time <= timestamp_next)
         print "COUNT packet: ", log_packets.count()
         print "COUNT: ",self.store.find(LogPacket).count()
+
+
         #else:
          #   log_packets = self.store.find(LogPacket, LogPacket.creation_time >= timestamp_pre, LogPacket.creation_time <= timestamp_next, LogPacket.host.host_name == unicode(host_name))
         packet_number = 0
