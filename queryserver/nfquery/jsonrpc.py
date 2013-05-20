@@ -241,10 +241,10 @@ class jsonRPCServer(jsonrpc.JSONRPC):
         self.rpclogger.debug('GET HOSTS')
         return self.queryManager.get_all_hosts()
  
-    def jsonrpc_get_total_severity(self, timestamp, host=None):
+    def jsonrpc_get_total_severity(self, timestamp, host, quantity):
         self.rpclogger.debug('In %s' % sys._getframe().f_code.co_name)
         self.rpclogger.debug('GET TOTAL SEVERITY')
-        return self.queryManager.get_total_severity(timestamp)
+        return self.queryManager.get_total_severity(timestamp, host, quantity)
 
     def jsonrpc_get_last_thirty_min_log(self):
         self.rpclogger.debug('In %s' % sys._getframe().f_code.co_name)

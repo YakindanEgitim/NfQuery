@@ -590,7 +590,7 @@ class QueryManager:
         return list(hosts)
 
 
-    def get_total_severity(self, timestamp, host_name=None):
+    def get_total_severity(self, timestamp, host, quantity):
         print "TIMESTAMPT:",timestamp
         self.store.rollback()
         total_severity = {}
