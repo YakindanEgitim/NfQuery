@@ -1,127 +1,125 @@
 <!DOCTYPE html>
 <html>
-
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="NfQuery : A Privacy Friendly Framework for Multi-Domain Threat Analysis" />
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>NfQuery</title>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Nfquery by YakindanEgitim</title>
   </head>
 
   <body>
+    <div id="container">
+      <div class="inner">
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/ULAKBIM/NfQuery">View on GitHub</a>
-
-          <h1 id="project_title">NfQuery</h1>
-          <h2 id="project_tagline">A Privacy Friendly Framework for Multi-Domain Threat Analysis</h2>
-
-            <section id="downloads">
-              <a class="tar_download_link" href="https://www.ulakbim.gov.tr/eng/ulaknet/eup/nfquery/downloads/NfQuery-QS-v0.1.1.tar.gz">NfQuery-QS-v0.1.1.tar.gz</a>
-              <a class="tar_download_link" href="https://www.ulakbim.gov.tr/eng/ulaknet/eup/nfquery/downloads/NfQuery-Plugin-v0.1.2.tar.gz">NfQuery-Plugin-v0.1.2.tar.gz</a>
-            </section>
+        <header>
+          <h1>Nfquery</h1>
+          <h2>A Privacy Friendly Framework for Multi-Domain Threat Analysis</h2>
         </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/YakindanEgitim/NfQuery/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/YakindanEgitim/NfQuery/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/YakindanEgitim/NfQuery" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1></h1>
+
+<h1>
+<a name="nfquery--nfquery-a-privacy-friendly-framework-for-multi-domain-threat-analysis--" class="anchor" href="#nfquery--nfquery-a-privacy-friendly-framework-for-multi-domain-threat-analysis--"><span class="octicon octicon-link"></span></a>NfQuery : NfQuery: A Privacy Friendly Framework for Multi-Domain Threat Analysis  </h1>
+
+<p>.. contents::
+..
+    1  What is NfQuery Framework
+      1.1  Components 
+    2  Dependencies
+    3  Documentation
+    4  Download
+    5  Copyright and License
+    6  Author</p>
+
+<h1>
+<a name="what-is-it" class="anchor" href="#what-is-it"><span class="octicon octicon-link"></span></a>What is it?</h1>
+
+<p>The main function of NfQuery is creating useful queries to be used in the NfSen Plug-ins of each organization or 
+domain registered to the Query Server (QS). Queries are fetched from QS and executed by Plug-ins on the aggregated
+NetFlow data of organizations. As a result of these executions, NfSen Plug-in find the flow data which includes 
+the related threat or attack information. After the detection, Plug-in alerts the QS automatically regarding the 
+findings of the applied query.</p>
+
+<p>By collecting and interpreting attack statistics from each Plug-in, NfQuery creates a general overview of the threat
+trends seen in the multi-domain network. Finally, by utilizing the alerting system of NfSen, NfQuery becomes a threat
+detection and security alerting system for multi-domain networks.</p>
+
+<h2>
+<a name="components" class="anchor" href="#components"><span class="octicon octicon-link"></span></a>Components</h2>
+
+<p>a. Query Server (QS)
+Query Server (QS) is placed in the center of the system and establishes the connection between all components. QS 
+is composed of three sub-elements; Query Manager (QM), Query Generator (QG) and Query Repository (QR). </p>
+
+<p>b. NfQuery Plug-in
+The NfQuery Plug-in is installed at each domain side over the NfSen instance at the domain and communicates with QS
+to perform the administrator’s requests such as fetching new queries, updating query list, getting/sending statistical
+reports and executing the queries over the flow data. </p>
+
+<p>c. Sources
+NfQuery sources are the main components that provide threat information. This includes publicly available resources
+such as Botnet C&amp;C server lists (Amada SpyEye), DNS blacklists (DShield), malicious domains and phishing sites lists
+or output of security analysis applications such as Honeypots, Intrusion Detection Systems (IDS), Intrusion Prevention
+Systems (IPS) or Firewalls which may provide data in means of log files for private use in NfQuery framework.</p>
+
+<h1>
+<a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h1>
+
+<p>Please see the file called plugin/INSTALL for plugin dependecies.
+Please see the file called queryserver/INSTALL for queryserver dependecies.</p>
+
+<h2>
+<a name="the-latest-version" class="anchor" href="#the-latest-version"><span class="octicon octicon-link"></span></a>The Latest Version</h2>
+
+<p>Details of the latest version can be found on the Official NfQuery Web Page.
+<a href="http://nfquery.ulakbim.gov.tr">http://nfquery.ulakbim.gov.tr</a></p>
+
+<h2>
+<a name="documentation" class="anchor" href="#documentation"><span class="octicon octicon-link"></span></a>Documentation</h2>
+
+<p>Please see <a href="http://nfquery.ulakbim.gov.tr/">http://nfquery.ulakbim.gov.tr/</a></p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Please see the file called plugin/INSTALL to install plugin.
+Please see the file called queryserver/INSTALL to install queryserver.</p>
+
+<h2>
+<a name="licensing" class="anchor" href="#licensing"><span class="octicon octicon-link"></span></a>Licensing</h2>
+
+<p>Please see the file called LICENSE.</p>
+
+<h1>
+<a name="author" class="anchor" href="#author"><span class="octicon octicon-link"></span></a>Author</h1>
+
+<p>Serdar Yigit <a href="mailto:serdar.yigit@tubitak.gov.tr">serdar.yigit@tubitak.gov.tr</a>
+Ahmet Can Kepenek <a href="mailto:ahmetcan.kepenek@gmail.com">ahmetcan.kepenek@gmail.com</a>
+Serhat Rifat Demircan <a href="mailto:demircan.serhat@gmail.com">demircan.serhat@gmail.com</a></p>
+        </section>
+
+        <footer>
+          Nfquery is maintained by <a href="https://github.com/YakindanEgitim">YakindanEgitim</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
     </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>Welcome to NfQuery website.</h3>
-
-<h4>What is NfQuery?</h4>
-
-<p>NfQuery is NfSen based framework for multi-domain environments which uses the NetFlow data for analysis of threats and burst the usage of already available data from various sources such as on-line repositories and local security tools of each domain (Honeypots, IDS and etc.) The framework has been developed to enable integration of various threat detection methods and transmission of information over a multi-domain environment automatically. A central server in this framework coordinates the information sharing and integration of various detection methods, where the plug-in running in each domain represents the interface of the system to the administrators for their analysis and information exchange. The main design criterion lying behind NfQuery is to develop a tool for multi-domain threat analysis which eases the privacy concerns of each domain included in the framework. This is achieved by keeping the NetFlow data belonging to a domain locally and sharing only the queries to be applied over the flow data via the server and the statistics on the results of these queries (which is even optional but quite crucial for the system).<p>
-
-<h4>Background</h4>
-
-<p>NfQuery has been developed under JRA2.T4 of GN3 project. The NfQuery release to be delivered at the end of GN3 project (March 2013) will consist of a Query Server (QS) application and the NfQuery Plug-In.</p>
-
-<h4>Main Components</h4>
-
-<p>The Query Server (QS) operates at the center of NfQuery framework in order to generate Nfdump queries by using the threat data published by various sources and to distribute these queries to the registered domains. This distribution is achieved by the NfQuery Plug-ins which operates on the NfSen installations in each registered domain. NfQuery Plug-in enables the registered domains to apply these queries over their flow data. Plug-in sends the statistics of results of queries to QS which is used to rate the queries in QS pool. This improves the overall efficiency of the system. On the other hand, Plug-in preserves the user data privacy at registered domain side by keeping the actual flow data and the results on local NfSen server. The only exception of such behaviour occurs when Plug-in detects a Multi-domain threat which means the applied queries result in a match to an IP address belonging to another domain registered to the same QS. In such a case, the Plug-in sends an alert to the QS which includes information on the query and the included domain.</p>
-
-<p>In an NfQuery instance there exists a central QS and various NfQuery Plug-Ins installed at the participating domains.</p>
-
-<p>QS collects and parses data from sources. QS installation comes with 4 pre-defined sources namely DFN Honeypot, Malcode, Spyeyetracker and SES. QS generates new queries using the data collected from these sources. QS sends the generated queries to Plug-in instances and collects feedback for the queries sent. The main components of the NfQuery Framework are represented in Figure 2. </p>
-
-<p align="center"><img src="http://www.ulakbim.gov.tr/eng/ulaknet/eup/nfquery/img/MultiDomainSecurityFrameworkv5.png" title="Main components of NfQuery Framework" width="640px" /></p><p align="center"><b>Figure 1: Components of the NfQuery Framework</b></p>
-
-<h4>Downloads</h4>
-
-<h5>Stable version</h5><p><b>Query Server v0.1.1</b> [ <a href="https://www.ulakbim.gov.tr/eng/ulaknet/eup/nfquery/downloads/NfQuery-QS-v0.1.1.tar.gz" title="NfQuery QS v0.1.1">tar.gz</a> ] [ sha1 = e12e45e32dcb1782dfe47083373e8008b11dd47f ]</p><p><b>Plugin v0.1.2</b> [ <a href="https://www.ulakbim.gov.tr/eng/ulaknet/eup/nfquery/downloads/NfQuery-Plugin-v0.1.2.tar.gz" title="NfQuery Plugin v0.1.2">tar.gz</a> ] [ sha1 = aee86c42e7ad5bbba35652c96d99b18c8b8a5b12 ]</p>
-
-<h5>Development<a href="https://github.com/ULAKBIM/NfQuery" target="_blank"><br /></a></h5><p><a href="https://github.com/ULAKBIM/NfQuery" target="_blank">https://github.com/ULAKBIM/NfQuery</a></p>
-
-
-<h4>Documentation</h4>
-
-<p>
-  <b>Guides & Manuals</b>
-	</p><ul>
-		<li><a href="https://www.ulakbim.gov.tr/eng/ulaknet/eup/nfquery/docs/NfQuery-Plugin-How-to.pdf" title="NfQuery Plugin How-to">NfQuery Plugin How-to</a></li>
-	</ul>
-
-
-<p>
-	<b>Presentations</b>
-	</p><ul>
-		<li><a href="docs/NfQuery_GEANT_Symposium_2012.pdf">[ pdf ]</a> NfQuery: A Privacy Friendly Framework for Multi-Domain Threat Analysis @ GEANT Symposium 2012, Vienna, Austria 15-19 October 2012</li>
-		<li><a href="docs/yuce-nfquery.pdf">[ pdf ]</a> NfQuery: A Privacy Friendly Framework for Multi-Domain Threat Analysis @ Campus Network Monitoring Workshop, Brno, Czech Republic 24-25 April 2012</li>
-	</ul>
-<p>&nbsp;</p>
-
-<p>
-	<b>Media</b>
-	</p><ul>
-		<li>GEANT NfQuery Demo June 2012</li></ul><ul>
-		<iframe src="http://www.youtube.com/embed/ZgZNr2MUL5E" frameborder="0" height="360" width="640"></iframe>
-	</ul>
-<p>&nbsp;</p>
-
-<h4>Authors and Contributors</h4>
-
-<ul>
-  <li>Serdar Yiğit [<a href="https://github.com/syigit" class="user-mention">@syigit</a>]</li>
-  <li>Murat Soysal [<a href="https://github.com/msoysal" class="user-mention">@msoysal</a>]</li>
-  <li>Emre Yüce [<a href="https://github.com/EmreY" class="user-mention">@EmreY</a>]</li>
-  <li>Serhat Demircan [<a href="https://github.com/sdemircan" class="user-mention">@sdemircan</a>]</li>
-  <li>Ahmet Can Kepenek [<a href="https://github.com/ackepenek" class="user-mention">@ackepenek</a>]</li>
-</ul>
-
-<h4>How you can contribute?</h4>
-
-<p><b>Be a developer:</b> Help development of NfQuery.</p>
-
-<p><b>Be a source:</b> Feed QS with incident data.</p>
-
-<h4>Contact</h4>
-
-<p>nfquery@ulakbim.gov.tr</p>
-
-<hr width="100%" />
-
-<p>
-	<a href="http://www.ulakbim.gov.tr/" target="_blank"><img src="http://www.ulakbim.gov.tr/eng/ulaknet/eup/nfquery/img/ULAKBIM.jpg" height="100px" style="width:auto;" /></a>
-	<a href="http://www.geant.net/" target="_blank"><img src="http://www.ulakbim.gov.tr/eng/ulaknet/eup/nfquery/img/GEANT.jpg" height="100px" style="width:auto;" /></a>
-</p>
-
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">NfQuery maintained by <a href="https://github.com/ULAKBIM">ULAKBIM</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
   </body>
 </html>
